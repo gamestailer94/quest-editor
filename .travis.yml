@@ -7,7 +7,7 @@ matrix:
       compiler: clang
     - os: osx
 
-script: npm run pack --dist
+script: npm run dist
 sudo: required
 dist: trusty
 addons:
