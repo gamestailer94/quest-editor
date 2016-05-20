@@ -4,3 +4,5 @@ os:
   - linux
   - osx
 script: npm run dist
+deploy:
+	skip_cleanup: true
