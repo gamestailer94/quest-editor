@@ -4,7 +4,7 @@
 		"app-category-type": "public.app-category.developer-tools",
 		"asar": true,
 		"win": {
-			"iconUrl": "http://192.168.0.234/dev/electron/resources/build/icon.ico"
+			"iconUrl": "https://drive.google.com/uc?export=download&id=0B4PGzaSkuAoiQUZ4eTJ5SWRBZU0"
 		}
 	},
 	"scripts": {
