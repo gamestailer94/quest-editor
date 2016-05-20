@@ -19,9 +19,8 @@ addons:
       - ruby-dev
       - build-essential
       - g++-4.8
-      - rubygems-integration
 before_install:
-  - sudo gem install fpm
+  - gem install fpm
 cache:
   - node_modules
   - app/node_modules
