@@ -2,3 +2,5 @@
 default_app.asar
 electron.asar
 node_modules
+npm-debug.log
+dist
