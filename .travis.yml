@@ -1,4 +1,7 @@
-language: c
+language:
+  - c
+  - ruby
+rvm: "2.2"
 osx_image: xcode7.3
 matrix:
   include:
