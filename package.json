@@ -2,7 +2,7 @@
 	"build": {
 		"app-bundle-id": "com.gamestailer94.QuestEditor",
 		"app-category-type": "public.app-category.developer-tools",
-		"asar": true,
+		"asar": false,
 		"win": {
 			"iconUrl": "https://drive.google.com/uc?export=download&id=0B4PGzaSkuAoiQUZ4eTJ5SWRBZU0"
 		}
