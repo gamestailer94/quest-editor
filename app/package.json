@@ -6,7 +6,7 @@
 	"hompage": "http://gamestailer94.de",
 	"license": "Creative Commons Attribution 4.0 International License <http://creativecommons.org/licenses/by/4.0/>",
 	"main": "./main.js",
-	"version": "0.1.0-beta1",
+	"version": "0.1.0-beta5",
 	"dependencies": {
 		"sha1": ">=1.0.0"
 	}
