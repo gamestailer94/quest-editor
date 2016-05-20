@@ -8,6 +8,7 @@
 		}
 	},
 	"scripts": {
+		"postinstall": "install-app-deps",
 		"pack": "build",
 		"dist": "build"
 	},

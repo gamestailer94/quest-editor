@@ -1,7 +1,13 @@
 platform:
   - x64
-install: npm install
+install:
+  - ps: Install-Product node 6 x64
+  - git reset --hard HEAD
+  - npm install npm -g
+  - npm install
+  - npm prune
 build_script: npm run pack --dist
+test: off
 cache:
   - node_modules
   - '%APPDATA%\npm-cache'
