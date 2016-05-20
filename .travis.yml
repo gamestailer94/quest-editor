@@ -7,13 +7,19 @@ os:
   - osx
 script: npm run dist
 sudo: required
+env:
+  - CXX=g++-4.8
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - icnsutils
       - graphicsmagick
       - ruby-dev
       - build-essential
+      - g++-4.8
+      - rubygems-integration
 before_install:
   - sudo gem install fpm
 cache:
