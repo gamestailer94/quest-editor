@@ -4,7 +4,7 @@
 	"description": "Games_stailer94 Quest Editor",
 	"author": "Game_stailer94 <game_stailer94@hotmail.de>",
 	"homepage": "http://gamestailer94.de",
-	"license": "Creative Commons Attribution 4.0 International License <http://creativecommons.org/licenses/by/4.0/>",
+	"license": "MIT License",
 	"main": "main.js",
 	"version": "0.1.0-beta5",
 	"dependencies": {
