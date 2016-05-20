@@ -19,6 +19,7 @@ addons:
       - libgnome-keyring-dev
       - icnsutils
       - clang-3.7
+      - graphicsmagick
 before_install:
   - gem install fpm
 cache:

@@ -12,10 +12,11 @@
 		"pack": "build",
 		"dist": "build",
 		"release": "build",
-		"dist:win64": "./node_modules/.bin/build --platform win32 --arch x64"
+		"dist:win64": "./node_modules/.bin/build --platform win32 --arch x64",
+		"pack:win64": "./node_modules/.bin/build --platform win32 --arch x64"
 	},
 	"devDependencies": {
-		"electron-builder": ">=3.25.0",
+		"electron-builder": "3.17.1",
 		"electron-prebuilt": ">=1.1.0"
 	}
 }
