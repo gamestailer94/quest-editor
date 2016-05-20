@@ -2,11 +2,11 @@
   	"productName": "[GS] Quest Editor",
 	"name": "QuestEditor",
 	"description": "Games_stailer94 Quest Editor",
-	"author": "Game_stailer94",
+	"author": "Game_stailer94 <game_stailer94@hotmail.de>",
 	"hompage": "http://gamestailer94.de",
 	"license": "Creative Commons Attribution 4.0 International License <http://creativecommons.org/licenses/by/4.0/>",
 	"main": "./main.js",
-	"email":"gamestailer94@hotmail.de",
+	"version": "1.0.0",
 	"dependencies": {
 		"sha1": "^1.0.0"
 	},
