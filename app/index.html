@@ -1,0 +1,102 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Quest Editor</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <style type="text/css"></style>
+    </head>
+    <body>
+    <div class="modal fade" tabindex="-1" role="dialog" id="maxModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Set Max Value</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>Max Number of Quests</h3>
+                    <div class="alert alert-danger">
+                        <h6>This will remove Quests if the Number is smaller then the Number of Quests.</h6>
+                        <h6>Currently Supported Number of Quests ist 999.</h6>
+                    </div>
+                    <input class="form-control" type="number" value="1" id="maxValue" max="999" min="1"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveMax">Save</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 hidden" id="noFolder">
+                <div class="alert alert-danger">
+                    <h1 class="text-center">No Directory Set</h1>
+                    <p>You did not set a Project Directory, press the Button to set it.<br> You can reset it later under File->Set Project Directory.</p>
+                    <button role="button" type="button" class="btn btn-primary setProjectDirectory">Set Project Directory</button>
+                </div>
+            </div>
+            <div class="col-sm-12 hidden" id="wrongFolder">
+                <div class="alert alert-danger">
+                    <p>The Selected Directory dos not look like a Project, maybe you try setting it again?</p>
+                    <button role="button" type="button" class="btn btn-primary setProjectDirectory">Set Project Directory</button>
+                </div>
+            </div>
+            <div class="col-sm-12" style="display: none" id="saved">
+                <div class="alert alert-success">
+                    <h5 class="text-center">Saved.</h5>
+                </div>
+            </div>
+            <div class="col-sm-6 col-sm-offset-3 hidden" id="loader">
+                <div class="alert alert-success">
+                    <h1 class="text-center">Building Elements</h1>
+                    <h5 class="text-center">If you have many Quests this can take some time.</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" style="width: 100%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hidden" id="mainContent">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel-group" id="quests" role="tablist">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /container -->
+    <div id="bottom-bar">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="pull-right btn-group">
+                        <button type="button" class="btn btn-default" id="setCategories">Categories</button>
+                        <button type="button" class="btn btn-primary" id="setMax">Max Value</button>
+                        <button type="button" class="btn btn-success" id="saveQuests">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+    <script src="js/vendor/bootstrap.min.js"></script>
+
+    <script>
+        // You can also require other files to run in this process
+        require('./renderer.js')
+    </script>
+    </body>
+</html>

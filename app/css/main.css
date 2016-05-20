@@ -1,0 +1,83 @@
+body {
+    padding-bottom: 50px;
+}
+
+
+#bottom-bar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: 100%;
+    background: linear-gradient(to bottom, #afafaf 0%,#0e0e0e 100%);
+    height:50px;
+}
+#bottom-bar .btn-group {
+    padding-top: 7px;
+}
+
+#mainContent {
+    padding-top:15px;
+}
+#mainContent.nopadding {
+    padding-top:0;
+}
+
+.click {
+    cursor: pointer;
+}
+
+i.glyphicon {
+    margin-left:5px;
+}
+
+.iconDiv {
+    height: 34px;
+    width: 34px;
+    background-position: 0 0;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.space {
+    margin-top: 5px;
+}
+
+textarea {
+    resize:vertical;
+}
+
+.icons{
+    width: 512px;
+    height: 640px;
+}
+
+.iconBg{
+    background-color: grey;
+}
+
+.grid {
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+}
+
+.grid tr {
+    height:32px;
+}
+
+.grid td {
+    padding: 0;
+    margin: 0;
+    width: 32px;
+}
+
+.grid td.active{
+    border: 3px solid #ffffff
+}
+
+#iconId {
+    color: #ffffff;
+    padding-top:13px;
+}
