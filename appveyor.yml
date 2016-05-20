@@ -1,7 +1,7 @@
 platform:
   - x64
 install: npm install
-build_script: npm run pack
+build_script: npm run pack --dist
 cache:
   - node_modules
   - '%APPDATA%\npm-cache'

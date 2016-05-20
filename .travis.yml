@@ -6,7 +6,7 @@ rvm: "2.2"
 os:
   - linux
   - osx
-script: npm run pack
+script: npm run pack --dist
 sudo: required
 env:
   - CXX=g++-4.8
