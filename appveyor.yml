@@ -2,3 +2,7 @@ platform:
   - x64
 install: npm install
 build_script: npm run dist
+cache:
+  - node_modules
+  - '%APPDATA%\npm-cache'
+  - 'app\node_modules'
