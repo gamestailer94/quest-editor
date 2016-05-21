@@ -2,7 +2,7 @@
 	"build": {
 		"app-bundle-id": "com.gamestailer94.QuestEditor",
 		"app-category-type": "public.app-category.developer-tools",
-		"asar": false,
+		"asar": true,
 		"win": {
 			"iconUrl": "https://raw.githubusercontent.com/gamestailer94/quest-editor/master/build/icon.ico"
 		}
