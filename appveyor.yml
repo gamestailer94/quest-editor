@@ -6,9 +6,13 @@ install:
   - npm install npm -g
   - npm install
   - npm prune
-build_script: npm run pack:win64
+build_script: npm run dist:win64
 test: off
+deploy: off
 cache:
   - node_modules
   - '%APPDATA%\npm-cache'
   - 'app\node_modules'
+environment:
+  GH_TOKEN:
+    secure: oXAtU/2izFnd/DW9h0Lt0iC2cvp+SLSjwZukkwsihL/bIktOV54XfxvDu05kbtIm

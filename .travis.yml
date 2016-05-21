@@ -9,7 +9,7 @@ matrix:
     - os: linux
     - os: osx
 
-script: npm run pack
+script: npm run dist
 sudo: required
 dist: trusty
 addons:

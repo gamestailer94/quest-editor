@@ -3,10 +3,10 @@
 	"name": "QuestEditor",
 	"description": "Games_stailer94 Quest Editor",
 	"author": "Game_stailer94 <game_stailer94@hotmail.de>",
-	"homepage": "http://gamestailer94.de",
+	"homepage": "https://github.com/gamestailer94/quest-editor",
 	"license": "MIT License",
 	"main": "main.js",
-	"version": "0.1.0-beta5",
+	"version": "0.1.1-beta1",
 	"dependencies": {
 		"sha1": ">=1.0.0"
 	}
