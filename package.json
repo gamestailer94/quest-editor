@@ -4,7 +4,7 @@
 		"app-category-type": "public.app-category.developer-tools",
 		"asar": false,
 		"win": {
-			"iconUrl": "https://drive.google.com/uc?id=0B4PGzaSkuAoiQUZ4eTJ5SWRBZU0"
+			"iconUrl": "https://raw.githubusercontent.com/gamestailer94/quest-editor/master/build/icon.ico"
 		}
 	},
 	"scripts": {
