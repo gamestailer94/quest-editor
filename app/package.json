@@ -6,7 +6,7 @@
 	"homepage": "https://github.com/gamestailer94/quest-editor",
 	"license": "MIT License",
 	"main": "main.js",
-	"version": "0.1.1-beta1",
+	"version": "0.1.1-beta2",
 	"dependencies": {
 		"sha1": ">=1.0.0"
 	}
