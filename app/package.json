@@ -4,7 +4,8 @@
 	"description": "Games_stailer94 Quest Editor",
 	"author": "Game_stailer94 <game_stailer94@hotmail.de>",
 	"homepage": "https://github.com/gamestailer94/quest-editor",
-	"license": "MIT License",
+	"repository": "https://github.com/gamestailer94/quest-editor",
+	"license": "MIT",
 	"main": "main.js",
 	"version": "0.1.1-beta2",
 	"dependencies": {
