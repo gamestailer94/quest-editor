@@ -1,13 +1,16 @@
 {
-  	"productName": "[GS] Quest Editor",
+  	"productName": "QuestEditor",
 	"name": "QuestEditor",
 	"description": "Games_stailer94 Quest Editor",
-	"author": "Game_stailer94 <game_stailer94@hotmail.de>",
+	"author": "Tim Platzke <platzke.tim@gmail.com>",
 	"homepage": "https://github.com/gamestailer94/quest-editor",
-	"repository": "https://github.com/gamestailer94/quest-editor",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:gamestailer94/quest-editor.git"
+	},
 	"license": "MIT",
 	"main": "main.js",
-	"version": "0.1.1-beta2",
+	"version": "0.2.0-beta.1",
 	"dependencies": {
 		"sha1": ">=1.0.0"
 	}
