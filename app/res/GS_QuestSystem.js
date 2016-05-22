@@ -25,7 +25,7 @@
 //  http://jugglingcode.com/scripts/MV/QuestSystem/Demo.zip
 //
 // Credits:
-// Game_stailer94 ~ For creating it.
+// Game_stailer94 ~ For Fixes and new Features.
 // gameus ~ For the Initial Version
 //=============================================================================
 
@@ -108,6 +108,10 @@
  * @param Max Steps
  * @desc Defines the number of steps to show at once under a quest info (0 for all).
  * @default 0
+ * 
+ * @param Default Filter
+ * @desc Default Filter to show.0 = all, 1 = progress, 2 = completed, 3 = failed
+ * @default 0
  *
  * @param ---------------
  *
@@ -139,25 +143,61 @@
  *
  * @param ---------------
  *
- * @param Complete Step Color
- * @desc Color for Completed Steps in Hex
- * @default #00ff00
- *
  * @param Default Step Color
  * @desc Color for Active Steps in Hex
  * @default #ffffff
+ *
+ * @param Complete Step Color
+ * @desc Color for Completed Steps in Hex
+ * @default #00ff00
  *
  * @param Failed Step Color
  * @desc Color for Failed Steps in Hex
  * @default #ff0000
  *
+ * @param Quest Name Color
+ * @desc Color for Quest Name in Hex
+ * @default #84aaff
+ *
+ * @param Quest Description Color
+ * @desc Color for Quest Description in Hex
+ * @default #ffffff
+ *
+ * @param Steps Name Color
+ * @desc Color for Steps Name in Hex
+ * @default #84aaff
+ *
+ * @param Rewards Name Color
+ * @desc Color for Rewards Name in Hex
+ * @default #84aaff
+ *
+ * @param Rewards Point Color
+ * @desc Color for Rewards Point in Hex
+ * @default #ffffff
+ * 
+ * @param Rewards Hidden Color
+ * @desc Color for Hidden Rewards in Hex
+ * @default #ffffff
+ *
+ * @param ---------------
+ *
+ * @param Font Options
+ *
+ * @param ---------------
+ *
+ * @param Quest Info Font
+ * @desc Font for Quest Info Window (the one on the Right)
+ * @default GameFont
+ *
+ * @param Quest Info Font Size
+ * @desc Font Size for Quest Info Window (the one on the Right)
+ * @default 28
+ *
  * @help 
  * Report any bugs, editor or plugin related here:
- *   http://forums.rpgmakerweb.com/index.php?/topic/49234-gameus-quest-system/
+ *   http://forums.rpgmakerweb.com/index.php?/topic/62216-game_stailer94%C2%B4s-quest-system/
  * Before reporting a bug, check the version of editor/plugin to see if you're using an outdated version
  *
- * I highly recommend checking out the demo found here:
- *   http://jugglingcode.com/scripts/MV/QuestSystem/Demo.zip
  * ----------------------------------------------------
  * These are a list of following Plugin Commands:
  * ----------------------------------------------------
@@ -171,12 +211,12 @@
  *   Makes the quest hide a step.
  *
  * Quest CompleteStep QuestID StepID
- *   Marks a Step as Comleted (StepID Starting from 1).
+ *   Marks a Step as Completed (StepID Starting from 1).
  *
  * Quest FailStep QuestID StepID
  *   Marks a Step as Failed (StepID Starting from 1).
  *
- * Quest ActiveStep QestID StepID
+ * Quest ActiveStep QuestID StepID
  *   Marks a Step as active (StepID Starting from 1).
  *
  * Quest Complete QuestID
@@ -643,10 +683,12 @@ DataManager._databaseFiles.push(
             this.drawIcon(q.icon, 0, this.lineY);
             headerX = 40;
         }
-        this.questBitmap.textColor = this.systemColor();
+        this.setFont(GSScripts["Config"]["QuestSystem"]["Quest Info Font"] || this.standardFontFace());
+        this.setFontSize(GSScripts["Config"]["QuestSystem"]["Quest Info Font Size"] || this.standardFontSize());
+        this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Quest Name Color"] || this.systemColor();
         this.questBitmap.drawText(q.name, headerX, this.lineY, this.contentsWidth() - headerX, this.lineHeight());
         this.write();
-        this.questBitmap.textColor = this.normalColor();
+        this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Quest Description Color"] || this.normalColor();
         var lines = this.sliceText(q.desc, this.contentsWidth());
         for (var i = 0; i < lines.length; i += 1) {
             this.questBitmap.drawText(lines[i], 0, this.lineY, this.contentsWidth(), this.lineHeight());
@@ -659,7 +701,7 @@ DataManager._databaseFiles.push(
     Window_QuestInfo.prototype.drawQuestSteps = function(q) {
         // Draw the quest steps
         var bullet = String(GSScripts["Config"]["QuestSystem"]["Bullet Character"] || "-" ) + " ";
-        this.questBitmap.textColor = this.systemColor(); 
+        this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Steps Name Color"] || this.systemColor();
         this.questBitmap.drawText(GSScripts["Config"]["QuestSystem"]["Steps Word"], 0, this.lineY, this.contentsWidth(), this.lineHeight());
         this.write();
         this.questBitmap.textColor = this.normalColor();
@@ -681,7 +723,7 @@ DataManager._databaseFiles.push(
                 else
                     stepText += " " + String(varVal) + " / " + String(maxVal);
             }    
-            lines = this.sliceText(stepText, this.contentsWidth());
+            var lines = this.sliceText(stepText, this.contentsWidth());
             var done = i + startStep < q.currentStep || (q.status === "completed" || q.status === "failed");
             this.questBitmap.paintOpacity = done ? 160 : 255;
             for (var j = 0; j < lines.length; j += 1) {
@@ -700,15 +742,16 @@ DataManager._databaseFiles.push(
         if(q.rewards.length > 0) {
             var bullet = String(GSScripts["Config"]["QuestSystem"]["Bullet Character"] || "-") + " ";
             // Draw Rewards
-            this.questBitmap.textColor = this.systemColor();
+            this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Rewards Name Color"] || this.systemColor();
             this.questBitmap.drawText(GSScripts["Config"]["QuestSystem"]["Rewards Word"], 0, this.lineY, this.contentsWidth(), this.lineHeight());
             this.write();
-            this.questBitmap.textColor = this.normalColor();
+            this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Rewards Point Color"] || this.normalColor();
             for (var i = 0; i < q.rewards.length; i += 1) {
                 var reward = q.rewards[i];
                 // If the reward is hidden and quest not completed yet...
                 if (reward[3] === true && q.status !== "completed") {
                     // Draw this shit as hidden
+                    this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Rewards Hidden Color"] || this.normalColor();
                     var hidden = bullet + (GSScripts["Config"]["QuestSystem"]["Hidden Reward Text"] || "??????");
                     this.questBitmap.drawText(hidden, 0, this.lineY, this.contentsWidth(), this.lineHeight());
                     this.write();
@@ -775,10 +818,17 @@ DataManager._databaseFiles.push(
         width = width || 312;
         if (item) {
             var iconBoxWidth = Window_Base._iconWidth + 8;
-            this.questBitmap.textColor = this.normalColor();
             this.drawIcon(item.iconIndex, x - 2, y + 2);
             this.questBitmap.drawText(item.name, x + iconBoxWidth, y, width - iconBoxWidth, this.lineHeight());
         }
+    };
+
+    Window_QuestInfo.prototype.setFont = function(font){
+        this.fontFace = font;
+    };
+
+    Window_QuestInfo.prototype.setFontSize = function(size){
+        this.fontSize = size;
     };
     
     Window_QuestInfo.prototype.drawIcon = function(iconIndex, x, y) {
@@ -857,7 +907,7 @@ DataManager._databaseFiles.push(
         var yy = String(GSScripts["Config"]["QuestSystem"]["Filter Position"]).toLowerCase() === "top" ? this.fittingHeight(1) : 0;
         // Stores all quests available from $gameParty
         this.qFilters = ["all", "progress", "completed", "failed"];
-        this.filterIndex = 0;
+        this.filterIndex = this.filterIndex = parseInt(GSScripts["Config"]["QuestSystem"]["Default Filter"]) || 0;
         this.data = [];
         this.cats = $gameQuests.categories();
         this.expanded = [];
@@ -967,7 +1017,7 @@ DataManager._databaseFiles.push(
             this.addCommand(GSScripts["Config"]["QuestSystem"]["No Quests Text"] || "No Quests", "none", false);
         }
     };
-    
+
     Window_Quests.prototype.cursorRight = function(wrap) {
         this.filterIndex = this.filterIndex + 1 > 3 ? 0 : this.filterIndex + 1;
         this.filter = this.qFilters[this.filterIndex];
@@ -1077,7 +1127,6 @@ DataManager._databaseFiles.push(
     
     Scene_Quest.prototype.handleQuest = function() {
         this.questWindow.deactivate();
-        console.log(this);
         this.questInfo.activate();
     };
     
@@ -1093,4 +1142,3 @@ DataManager._databaseFiles.push(
     Scene_Menu.prototype.commandQuest = function() {
         SceneManager.push(Scene_Quest);
     };
-    
