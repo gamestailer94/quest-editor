@@ -7,7 +7,7 @@ os:
   - linux
   - osx
 
-script: if [[ "$TRAVIS_TAG" ]]; then npm run pack; npm run dist; fi
+script: if [[ "$TRAVIS_TAG" ]]; then npm run pack; else npm run dist; fi
 sudo: required
 dist: trusty
 addons:
