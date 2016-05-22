@@ -686,7 +686,7 @@
     
 
     function saveQuests(){
-        var data = quests;
+        var data = $.merge([], quests);
         data.unshift(categories);
         data = JSON.stringify(data);
         var file = fs.openSync(path.join(projectDir, '/data/Quests.json'), 'w');
