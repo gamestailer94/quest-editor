@@ -32,7 +32,7 @@
 /*:
  * @plugindesc v1.0 - A simplistic quest system with various customization options.
  * @author Gamestailer94
- *
+ *jksrhaghuairdhgukasdfhukghkrgsfhkursgdh
  * @param Auto Rewards
  * @desc True or False. Tells the script whether or not to automatically give quest rewards upon completion.
  * @default true
@@ -174,7 +174,7 @@
  * @param Rewards Point Color
  * @desc Color for Rewards Point in Hex
  * @default #ffffff
- * 
+ *
  * @param Rewards Hidden Color
  * @desc Color for Hidden Rewards in Hex
  * @default #ffffff
@@ -216,7 +216,7 @@
  * Quest FailStep QuestID StepID
  *   Marks a Step as Failed (StepID Starting from 1).
  *
- * Quest ActiveStep QuestID StepID
+ * Quest ResetStep QuestID StepID
  *   Marks a Step as active (StepID Starting from 1).
  *
  * Quest Complete QuestID
@@ -266,6 +266,8 @@
  * $gameParty.totalQuests(filter)
  *   Does the same as above, but only applies to the quests that the party has.
  *
+ * $gameQuests.stepStatus(StepId)
+ *   Return Status of Step, can be "default", "completed" or "failed"
  */
  
  // Import 'Quest System' 
@@ -326,10 +328,13 @@ DataManager._databaseFiles.push(
                     $gameQuests.get(Number(args[1])).backStep();
                     break;
                 case 'completestep':
+                    $gameQuests.get(Number(args[1])).completeStep(Number(args[2]));
                     break;
                 case 'failstep':
+                    $gameQuests.get(Number(args[1])).failStep(Number(args[2]));
                     break;
-                case 'activestep':
+                case 'resetstep':
+                    $gameQuests.get(Number(args[1])).resetStep(Number(args[2]));
                     break;
             }
         }
@@ -490,6 +495,22 @@ DataManager._databaseFiles.push(
                     break;
             }
         }
+    };
+
+    Game_Quest.prototype.failStep = function(stepId){
+        this.steps[stepId-1][5] = 'failed';
+    };
+
+    Game_Quest.prototype.completeStep = function(stepId){
+        this.steps[stepId-1][5] = 'completed';
+    };
+
+    Game_Quest.prototype.resetStep = function(stepId){
+        this.steps[stepId-1][5] = 'default';
+    };
+
+    Game_Quest.prototype.stepStatus = function(stepId){
+        return this.steps[stepId-1][5] || 'default';
     };
     
     Game_Quest.prototype.completed = function() {
@@ -704,7 +725,6 @@ DataManager._databaseFiles.push(
         this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Steps Name Color"] || this.systemColor();
         this.questBitmap.drawText(GSScripts["Config"]["QuestSystem"]["Steps Word"], 0, this.lineY, this.contentsWidth(), this.lineHeight());
         this.write();
-        this.questBitmap.textColor = this.normalColor();
         var maxSteps = Number(GSScripts["Config"]["QuestSystem"]["Max Steps"] || 3);
         if (maxSteps == 0)
             maxSteps = q.steps.length;
@@ -722,10 +742,22 @@ DataManager._databaseFiles.push(
                     stepText += " " + String(Math.floor(varVal / maxVal * 100)) + "%";
                 else
                     stepText += " " + String(varVal) + " / " + String(maxVal);
-            }    
+            }
+            switch(step[5]){
+                case "default":
+                    this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Default Step Color"] || this.normalColor();
+                    break;
+                case "failed":
+                    this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Failed Step Color"] || this.normalColor();
+                    break;
+                case "completed":
+                    this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Complete Step Color"] || this.normalColor();
+                    break;
+                default:
+                    this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Default Step Color"] || this.normalColor();
+                    break;
+            }
             var lines = this.sliceText(stepText, this.contentsWidth());
-            var done = i + startStep < q.currentStep || (q.status === "completed" || q.status === "failed");
-            this.questBitmap.paintOpacity = done ? 160 : 255;
             for (var j = 0; j < lines.length; j += 1) {
                 var bulletOffset = 0;
                 if (j > 0)
