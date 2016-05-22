@@ -6,7 +6,8 @@ install:
   - npm install npm -g
   - npm install
   - npm prune
-build_script: npm run dist
+build_script: npm run dist:win64
+skip_tags: true
 test: off
 deploy: off
 cache:

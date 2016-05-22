@@ -10,7 +10,7 @@
 	},
 	"license": "MIT",
 	"main": "main.js",
-	"version": "0.2.0-beta.1",
+	"version": "0.2.0-beta.2",
 	"dependencies": {
 		"sha1": ">=1.0.0"
 	}

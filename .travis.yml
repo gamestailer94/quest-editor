@@ -7,7 +7,7 @@ os:
   - linux
   - osx
 
-script: npm run dist
+script: if [[ "$TRAVIS_TAG" ]]; then npm run dist; npm run pack; fi
 sudo: required
 dist: trusty
 addons:
@@ -22,8 +22,9 @@ addons:
       - graphicsmagick
       - ruby
 cache:
-  - node_modules
-  - app/node_modules
+  directories:
+    - node_modules
+    - app/node_modules
 install:
   - npm install npm -g
   - npm install

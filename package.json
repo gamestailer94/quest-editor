@@ -9,8 +9,8 @@
 	},
 	"scripts": {
 		"postinstall": "install-app-deps",
-		"pack": "build",
-		"dist": "build",
+		"pack": "build --arch all",
+		"dist": "build --arch all",
 		"release": "build",
 		"dist:win64": "./node_modules/.bin/build --platform win32 --arch x64",
 		"pack:win64": "./node_modules/.bin/build --platform win32 --arch x64"
