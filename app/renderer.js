@@ -9,6 +9,7 @@
     const fs = require('fs');
     const path = require('path');
     const sha1 = require('sha1');
+    const md5 = require('md5');
     var maxValue = 1;
     var categories = ['Primary', 'Secondary'];
     var projectDir = '';
@@ -66,15 +67,20 @@
             cont = false;
         }
         if(cont) {
-            var file = fs.openSync(path.join(projectDir, '/data/Quests.json'), 'a+');
-            var read = fs.readFileSync(file, {encoding: 'utf8'});
-            fs.closeSync(file);
+            try{
+                var file = fs.openSync(path.join(projectDir, '/data/Quests.json'), 'a+');
+                var read = fs.readFileSync(file, {encoding: 'utf8'});
+                fs.closeSync(file);
+            } catch(Exception){
+                var read = '';
+            }
             if (read != '') {
                 if(isLegacyData(read)) {
                     loadLegacyData(read);
                 }
                 maxValue = quests.length;
             }
+
             loadSystem();
             reloadQuests();
         }
@@ -93,6 +99,7 @@
         $('#mainContent').addClass('hidden');
         clearQuests();
         showQuests();
+        checkPlugin();
         $('#loader').addClass('hidden');
         $('#mainContent').removeClass('hidden');
     }
@@ -602,62 +609,126 @@
     }
 
     function loadSystem(){
-        var file = fs.openSync(path.join(projectDir, '/data/System.json'), 'r');
-        var read = fs.readFileSync(file, {encoding: 'utf8'});
-        fs.closeSync(file);
-        var tempVariables = JSON.parse(read).variables;
-        $.each(tempVariables,function(index, value){
-            if(value == ''){
-                value = '<Empty>'
-            }
-            variables.push(value);
-        });
-
-        file = fs.openSync(path.join(projectDir, '/data/Items.json'), 'r');
-        read = fs.readFileSync(file, {encoding: 'utf8'});
-        fs.closeSync(file);
-        var tempItems = JSON.parse(read);
-        $.each(tempItems, function(index, value){
-            if(value != null){
-                if(value.name == ''){
-                    value.name = '<Empty>'
+        try{
+            var file = fs.openSync(path.join(projectDir, '/data/System.json'), 'r');
+            var read = fs.readFileSync(file, {encoding: 'utf8'});
+            fs.closeSync(file);
+            var tempVariables = JSON.parse(read).variables;
+            $.each(tempVariables,function(index, value){
+                if(value == ''){
+                    value = '<Empty>'
                 }
-                items[value.id] = value.name;
-            }
-        });
+                variables.push(value);
+            });
 
-        file = fs.openSync(path.join(projectDir, '/data/Weapons.json'), 'r');
-        read = fs.readFileSync(file, {encoding: 'utf8'});
-        fs.closeSync(file);
-        var tempWeapons = JSON.parse(read);
-        $.each(tempWeapons, function(index, value){
-            if(value != null){
-                if(value.name == ''){
-                    value.name = '<Empty>'
+            file = fs.openSync(path.join(projectDir, '/data/Items.json'), 'r');
+            read = fs.readFileSync(file, {encoding: 'utf8'});
+            fs.closeSync(file);
+            var tempItems = JSON.parse(read);
+            $.each(tempItems, function(index, value){
+                if(value != null){
+                    if(value.name == ''){
+                        value.name = '<Empty>'
+                    }
+                    items[value.id] = value.name;
                 }
-                weapons[value.id] = value.name;
-            }
-        });
+            });
 
-        file = fs.openSync(path.join(projectDir, '/data/Armors.json'), 'r');
-        read = fs.readFileSync(file, {encoding: 'utf8'});
-        fs.closeSync(file);
-        var tempArmors = JSON.parse(read);
-        $.each(tempArmors, function(index, value){
-            if(value != null){
-                if(value.name == ''){
-                    value.name = '<Empty>'
+            file = fs.openSync(path.join(projectDir, '/data/Weapons.json'), 'r');
+            read = fs.readFileSync(file, {encoding: 'utf8'});
+            fs.closeSync(file);
+            var tempWeapons = JSON.parse(read);
+            $.each(tempWeapons, function(index, value){
+                if(value != null){
+                    if(value.name == ''){
+                        value.name = '<Empty>'
+                    }
+                    weapons[value.id] = value.name;
                 }
-                armors[value.id] = value.name;
+            });
+
+            file = fs.openSync(path.join(projectDir, '/data/Armors.json'), 'r');
+            read = fs.readFileSync(file, {encoding: 'utf8'});
+            fs.closeSync(file);
+            var tempArmors = JSON.parse(read);
+            $.each(tempArmors, function(index, value){
+                if(value != null){
+                    if(value.name == ''){
+                        value.name = '<Empty>'
+                    }
+                    armors[value.id] = value.name;
+                }
+            });
+
+            file = fs.openSync(path.join(projectDir, '/img/system/IconSet.png'), 'r');
+            read = fs.readFileSync(file);
+            fs.closeSync(file);
+            icons = read.toString('base64');
+            $('head').find('style').html('.iconDiv{ background:  url(data:image/png;base64,'+icons+') no-repeat left top;}');
+        } catch(Exception){
+            ipc.send('showError',Exception);
+        }
+    }
+
+    function checkPlugin(){
+        var installed = false;
+        try {
+            if (fs.statSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'))) {
+                var plugin = md5(fs.readFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js')));
+                var builtin = md5(fs.readFileSync(path.join(__dirname, '/res/GS_QuestSystem.js')));
+                if (plugin != builtin) {
+                    ipc.send('updatePluginDialog');
+                }
+                installed = true;
             }
-        });
+        } catch(Exception){
 
-        file = fs.openSync(path.join(projectDir, '/img/system/IconSet.png'), 'r');
-        read = fs.readFileSync(file);
-        fs.closeSync(file);
-        icons = read.toString('base64');
-        $('head').find('style').html('.iconDiv{ background:  url(data:image/png;base64,'+icons+') no-repeat left top;}');
+        }
+        try {
+            if (fs.statSync(path.join(projectDir, '/js/plugins/GameusQuestSystem.js'))) {
+                ipc.send('replacePluginDialog');
+                installed = true
+            }
+        } catch(Exception){
 
+        }
+        if(!installed) {
+            ipc.send('installPluginDialog')
+        }
+    }
+
+    function updatePlugin(event, select){
+        if(select === 0){
+            try {
+                var newPlugin = fs.readFileSync(path.join(__dirname, '/res/GS_QuestSystem.js'));
+                fs.writeFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'), newPlugin);
+            } catch(Exception){
+                ipc.send('showError',Exception.stack);
+            }
+        }
+    }
+
+    function replacePlugin(event, select){
+        if(select === 0){
+            try {
+                var newPlugin = fs.readFileSync(path.join(__dirname, '/res/GS_QuestSystem.js'));
+                fs.writeFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'),newPlugin);
+                fs.unlinkSync(path.join(projectDir, '/js/plugins/GameusQuestSystem.js'));
+            } catch(Exception){
+                ipc.send('showError',Exception);
+            }
+        }
+    }
+
+    function installPlugin(event, select){
+        if(select === 0){
+            try {
+                var newPlugin = fs.readFileSync(path.join(__dirname, '/res/GS_QuestSystem.js'));
+                fs.writeFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'),newPlugin);
+            } catch(Exception){
+                ipc.send('showError',Exception);
+            }
+        }
     }
 
     function encodeHtml(text) {
@@ -1013,7 +1084,11 @@
         quests = newQuests;
         updateProgress(null,100);
         setTimeout(reloadQuests, 200);
-    })
+    });
+
+    ipc.on('updatePluginDialogReturn', updatePlugin);
+    ipc.on('replacePluginDialogReturn', replacePlugin);
+    ipc.on('installPluginDialogReturn', installPlugin);
 
 })(jQuery);
 

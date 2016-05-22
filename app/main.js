@@ -6,6 +6,7 @@ const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
 const ipc = electron.ipcMain;
 const dialog = electron.dialog;
+const clipboard = electron.clipboard;
 const path = require('path');
 const categoriesModalPath = path.join('file://', __dirname, 'modals/categories.html');
 const iconModalPath = path.join('file://', __dirname, 'modals/icons.html');
@@ -186,7 +187,7 @@ ipc.on('getIcons', function(){
 ipc.on('setMax', setMax);
 
 ipc.on('getMax', function(){
-   setMaxWin.webContents.send('setMax', quests, newMax) 
+   setMaxWin.webContents.send('setMax', quests, newMax);
 });
 
 ipc.on('updateMaxProgress', function(event, progress){
@@ -197,6 +198,58 @@ ipc.on('returnMax', function(event, newQuests){
     mainWindow.webContents.send('returnMax', newQuests);
     setMaxWin.close();
 });
+
+ipc.on('updatePluginDialog', function(event){
+    const options = {
+        type: 'question',
+        title: 'Update JS Plugin',
+        message: "Update JS Plugin",
+        detail: "The Plugin Version in the Project is different then the one included in the Editor.\nUpdate it?",
+        buttons: ['Yes', 'No'],
+        defaultId: 0
+    };
+    dialog.showMessageBox(options, function (index) {
+        event.sender.send('updatePluginDialogReturn', index)
+    })
+});
+
+ipc.on('installPluginDialog', function(event){
+    const options = {
+        type: 'question',
+        title: 'Install JS Plugin',
+        message: "No Plugin JS found!",
+        detail: "Install the included one?\nRemember to active it.",
+        buttons: ['Yes', 'No'],
+        defaultId: 0
+    };
+    dialog.showMessageBox(options, function (index) {
+        event.sender.send('installPluginDialogReturn', index)
+    })
+});
+
+ipc.on('replacePluginDialog', function(event){
+    const options = {
+        type: 'question',
+        title: 'Replace JS Plugin',
+        message: "Gameus Quest System JS Plugin Found.",
+        detail: "It seems that you use the Gameus Quest System JS Plugin.\nDo you want to Replace it with the included Version of GS Quest System?\nThis WILL reset you Plugin settings, but not your Quests.\nRemember to active it.",
+        buttons: ['Yes', 'No'],
+        defaultId: 0
+    };
+    dialog.showMessageBox(options, function (index) {
+        event.sender.send('replacePluginDialogReturn', index)
+    })
+});
+
+ipc.on('showError', function (event, stack) {
+    clipboard.writeText(stack);
+    dialog.showErrorBox('Error', 'Please Report this Error in GitHub or at the Forums Topic.\nThis Error has been Copied to your Clipboard.\nThe Application will now exit.\n\nTrace:\n\n'+stack);
+    if(!debug){
+        mainWindow.close();
+        app.quit();
+    }
+});
+
 
 function showProjectDirDialog(event){
     dialog.showOpenDialog({
@@ -237,4 +290,3 @@ function setMax(event, Quests, NewMax){
     setMaxWin.on('closed', function () { setMaxWin = null });
     setMaxWin.loadURL(setMaxPath);
 }
-
