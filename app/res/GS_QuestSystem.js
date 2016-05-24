@@ -599,14 +599,18 @@ DataManager._databaseFiles.push(
 //---------------------------------------------------------------------------------------------
     Window_Base.prototype.sliceText = function(text, width) {
         var words = text.split(" ");
-        if (words.length === 1)
-            return words;
         var result = [];
         var current_text = words.shift();
-        for (var i = 0; i < words.length; i += 1) {
+        for (var i = 0; i < words.length; i++) {
             var word = words[i];
             var textW = this.contents.measureTextWidth(current_text + " " + word);
-            if (textW > width) {
+            var newlines = word.split(/\n/g);
+            if(newlines.length > 1){
+                for(var j = 0 ; j < newlines.length; j++) {
+                    result.push(current_text);
+                    current_text = newlines[j];
+                }
+            }else if (textW > width) {
                 result.push(current_text);
                 current_text = word;
             } else {
