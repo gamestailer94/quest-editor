@@ -738,10 +738,16 @@ DataManager._databaseFiles.push(
             if (step[1] === true) {
                 var varVal = $gameVariables.value(step[2]);
                 var maxVal = step[3];
-                if (step[4])
+                if (step[4]) {
                     stepText += " " + String(Math.floor(varVal / maxVal * 100)) + "%";
-                else
-                    stepText += " " + String(varVal) + " / " + String(maxVal);
+                }else {
+                    if(varVal >= maxVal){
+                        stepText += " " + String(maxVal) + " / " + String(maxVal);
+                        q.steps[i][5] = "completed";
+                    }else {
+                        stepText += " " + String(varVal) + " / " + String(maxVal);
+                    }
+                }
             }
             switch(step[5]){
                 case "default":

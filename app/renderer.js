@@ -599,7 +599,7 @@
             el.append(
                 $('<option>',{
                     value: index,
-                    html: pad(index)+ ' '+ encodeHtml(value),
+                    html: pad(index+1)+ ' '+ encodeHtml(value),
                     selected: selected == index+1
                 })
             )
@@ -614,17 +614,20 @@
             var read = fs.readFileSync(file, {encoding: 'utf8'});
             fs.closeSync(file);
             var tempVariables = JSON.parse(read).variables;
+            variables = [];
             $.each(tempVariables,function(index, value){
                 if(value == ''){
                     value = '<Empty>'
                 }
                 variables.push(value);
             });
+            variables.splice(0,1);
 
             file = fs.openSync(path.join(projectDir, '/data/Items.json'), 'r');
             read = fs.readFileSync(file, {encoding: 'utf8'});
             fs.closeSync(file);
             var tempItems = JSON.parse(read);
+            items = {};
             $.each(tempItems, function(index, value){
                 if(value != null){
                     if(value.name == ''){
@@ -638,6 +641,7 @@
             read = fs.readFileSync(file, {encoding: 'utf8'});
             fs.closeSync(file);
             var tempWeapons = JSON.parse(read);
+            weapons = {};
             $.each(tempWeapons, function(index, value){
                 if(value != null){
                     if(value.name == ''){
@@ -651,6 +655,7 @@
             read = fs.readFileSync(file, {encoding: 'utf8'});
             fs.closeSync(file);
             var tempArmors = JSON.parse(read);
+            armors = {};
             $.each(tempArmors, function(index, value){
                 if(value != null){
                     if(value.name == ''){
