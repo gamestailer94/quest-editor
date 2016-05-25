@@ -104,13 +104,15 @@ let menuTemplate = [{
     },{
         label: 'Reload Quests',
         click: reloadQuests
-    },{
-        label: 'Use Legacy (Gameus) Format',
-        type: 'checkbox',
-        checked: true,
-        enabled: false
     }]
-}];
+},{
+    label: "Help",
+    submenu: [{
+        label: 'About',
+        click: displayAbout
+    }]
+}
+];
 
 function createWindow () {
     const menu = Menu.buildFromTemplate(menuTemplate);
@@ -250,6 +252,18 @@ ipc.on('showError', function (event, stack) {
     }
 });
 
+
+function displayAbout(){
+    const options = {
+        type: 'info',
+        title: 'About',
+        message: "Abut this Editor and the JS Plugin",
+        detail: "This Editor has been Made by: gamestailer94\nFixes and addition Features for the JS Plugin by: gamestailer94\nData Format and original JS Plugin by: gameus",
+        buttons: ['Close'],
+        defaultId: 0
+    };
+    dialog.showMessageBox(options, function (index){});
+}
 
 function showProjectDirDialog(event){
     dialog.showOpenDialog({

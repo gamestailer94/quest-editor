@@ -526,9 +526,6 @@ DataManager._databaseFiles.push(
     };
     
     Game_Quest.prototype.nextStep = function() {
-        if(this.stepStatus(this.currentStep+1) != 'failed'){
-            this.completeStep(this.currentStep+1);
-        }
         this.currentStep = this.currentStep + 1 > this.maxSteps - 1 ? this.maxSteps - 1 : this.currentStep + 1;
     };
     
@@ -960,13 +957,13 @@ DataManager._databaseFiles.push(
         var yy = String(GSScripts["Config"]["QuestSystem"]["Filter Position"]).toLowerCase() === "top" ? this.fittingHeight(1) : 0;
         // Stores all quests available from $gameParty
         this.qFilters = ["all", "progress", "completed", "failed"];
-        this.filterIndex = this.filterIndex = parseInt(GSScripts["Config"]["QuestSystem"]["Default Filter"]) || 0;
+        this.filterIndex = parseInt(GSScripts["Config"]["QuestSystem"]["Default Filter"]) || 0;
         this.data = [];
         this.cats = $gameQuests.categories();
         this.expanded = [];
         for (var i = 0; i < this.cats.length; i += 1) 
             this.expanded[i] = false;
-        this.filter = "all";
+        this.filter = this.qFilters[this.filterIndex];
         this.refreshQuests();
         Window_Command.prototype.initialize.call(this, xx, yy);
     };
@@ -1074,6 +1071,7 @@ DataManager._databaseFiles.push(
     Window_Quests.prototype.cursorRight = function(wrap) {
         this.filterIndex = this.filterIndex + 1 > 3 ? 0 : this.filterIndex + 1;
         this.filter = this.qFilters[this.filterIndex];
+        this.parent.parent.setOldIndex(-1);
         this.refreshQuests();
         this.refresh();
         this.select(0);
@@ -1082,6 +1080,7 @@ DataManager._databaseFiles.push(
     Window_Quests.prototype.cursorLeft = function(wrap) {
         this.filterIndex = this.filterIndex - 1 < 0 ? 3 : this.filterIndex - 1;
         this.filter = this.qFilters[this.filterIndex];
+        this.parent.parent.setOldIndex(-1);
         this.refreshQuests();
         this.refresh();
         this.select(0);
@@ -1180,6 +1179,10 @@ DataManager._databaseFiles.push(
     Scene_Quest.prototype.cancelInfo = function() {
         this.questWindow.activate();
         this.questInfo.deactivate();
+    };
+
+    Scene_Quest.prototype.setOldIndex = function(id){
+        this.oldIndex = id;
     };
     
     Scene_Quest.prototype.handleQuest = function() {
