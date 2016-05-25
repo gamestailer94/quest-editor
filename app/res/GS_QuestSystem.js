@@ -866,11 +866,11 @@ DataManager._databaseFiles.push(
     };
 
     Window_QuestInfo.prototype.setFont = function(font){
-        this.fontFace = font;
+        this.questBitmap.fontFace = font;
     };
 
     Window_QuestInfo.prototype.setFontSize = function(size){
-        this.fontSize = size;
+        this.questBitmap.fontSize = size;
     };
     
     Window_QuestInfo.prototype.drawIcon = function(iconIndex, x, y) {
@@ -1138,6 +1138,7 @@ DataManager._databaseFiles.push(
     };
     
     Scene_Quest.prototype.createQuestWindow = function() {
+        this.oldIndex = -1;
         this.questWindow = new Window_Quests();
         this.questWindow.setHandler("cat", this.handleCategory.bind(this));
         this.questWindow.setHandler("quest", this.handleQuest.bind(this));
@@ -1152,11 +1153,14 @@ DataManager._databaseFiles.push(
     
     Scene_Quest.prototype.update = function() {
         var index = this.questWindow.index();
-        var q = this.questWindow._list[index];
-        if (q.symbol === "quest")
-            this.questInfo.setQuest(q.ext);
-        else
-            this.questInfo.setQuest(-1);
+        if(this.oldIndex != index) {
+            var q = this.questWindow._list[index];
+            if (q.symbol === "quest")
+                this.questInfo.setQuest(q.ext);
+            else
+                this.questInfo.setQuest(-1);
+            this.oldIndex = index;
+        }
         this.questFilter.filterIndex = this.questWindow.filterIndex;
         this.questFilter.refresh();
         Scene_Base.prototype.update.call(this);
