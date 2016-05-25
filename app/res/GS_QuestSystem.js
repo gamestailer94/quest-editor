@@ -526,6 +526,9 @@ DataManager._databaseFiles.push(
     };
     
     Game_Quest.prototype.nextStep = function() {
+        if(this.stepStatus(this.currentStep+1) != 'failed'){
+            this.completeStep(this.currentStep+1);
+        }
         this.currentStep = this.currentStep + 1 > this.maxSteps - 1 ? this.maxSteps - 1 : this.currentStep + 1;
     };
     
@@ -545,6 +548,11 @@ DataManager._databaseFiles.push(
         if ((GSScripts["Config"]["QuestSystem"]["Auto Rewards"] || "false").toLowerCase() === "true") {
             this.giveRewards();
         }
+        for(var i = 0; i < this.steps.length; i++){
+            if(this.stepStatus(i+1) != 'failed'){
+                this.completeStep(i+1);
+            }
+        }
         this.currentStep = this.maxSteps - 1;
         this.status = "completed";
     };
@@ -552,6 +560,9 @@ DataManager._databaseFiles.push(
     Game_Quest.prototype.reset = function() {
         this.status = "progress";
         this.currentStep = 0;
+        for(var i = 0; i < this.steps.length; i++){
+            this.resetStep(i+1);
+        }
     };
 
 //---------------------------------------------------------------------------------------------
