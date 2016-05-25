@@ -1,12 +1,12 @@
 platform:
-  - x32
+  - x86
 install:
   - ps: Install-Product node 6
   - git reset --hard HEAD
   - npm install npm -g
   - npm install
   - npm prune
-build_script: npm run dist
+build_script: npm run dist:ia32
 skip_tags: true
 test: off
 deploy: off
