@@ -7,11 +7,14 @@ const Menu = electron.Menu;
 const ipc = electron.ipcMain;
 const dialog = electron.dialog;
 const clipboard = electron.clipboard;
+const autoUpdater = electron.autoUpdater;
+const os = require('os');
 const path = require('path');
 const categoriesModalPath = path.join('file://', __dirname, 'modals/categories.html');
 const iconModalPath = path.join('file://', __dirname, 'modals/icons.html');
 const setMaxPath = path.join('file://', __dirname, 'modals/setMax.html');
 const debug = false;
+
 
 //Squirrle Events Handeling
 
@@ -27,7 +30,6 @@ function handleSquirrelEvent() {
     }
 
     const ChildProcess = require('child_process');
-    const path = require('path');
 
     const appFolder = path.resolve(process.execPath, '..');
     const rootAtomFolder = path.resolve(appFolder, '..');
@@ -81,7 +83,38 @@ function handleSquirrelEvent() {
             app.quit();
             return true;
     }
-};
+}
+
+//Auto Update Handling
+
+var platform = os.platform() + '_' + os.arch();
+var version = app.getVersion();
+
+autoUpdater.setFeedURL('https://quest.gamestailer94.de/update/'+platform+'/'+version);
+ try {
+    autoUpdater.checkForUpdates();
+} catch(error){
+    //looks like app is not installed, skip update check.
+}
+autoUpdater.on('update-downloaded', function(){
+    const options = {
+        type: 'question',
+        title: 'Update',
+        message: "A newer Version of this Editor and JS Plugin is available, do you want to close and update?",
+        buttons: ['Yes', 'No'],
+        defaultId: 0
+    };
+    dialog.showMessageBox(options, function (index) {
+
+        if(index == 0) {
+            autoUpdater.quitAndInstall();
+        }
+    });
+});
+
+
+
+//Windows and other persistent stuff
 
 let categoriesWin;
 let IconWin;
