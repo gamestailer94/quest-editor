@@ -719,10 +719,10 @@ DataManager._databaseFiles.push(
         this.setFont(GSScripts["Config"]["QuestSystem"]["Quest Info Font"] || this.standardFontFace());
         this.setFontSize(GSScripts["Config"]["QuestSystem"]["Quest Info Font Size"] || this.standardFontSize());
         this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Quest Name Color"] || this.systemColor();
-        this.questBitmap.drawText(q.name, headerX, this.lineY, this.contentsWidth() - headerX, this.lineHeight());
+        this.questBitmap.drawText(this.convertEscapeCharacters(q.name), headerX, this.lineY, this.contentsWidth() - headerX, this.lineHeight());
         this.write();
         this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Quest Description Color"] || this.normalColor();
-        var lines = this.sliceText(q.desc, this.contentsWidth());
+        var lines = this.sliceText(this.convertEscapeCharacters(q.desc), this.contentsWidth());
         for (var i = 0; i < lines.length; i += 1) {
             this.questBitmap.drawText(lines[i], 0, this.lineY, this.contentsWidth(), this.lineHeight());
             this.write();
@@ -775,7 +775,7 @@ DataManager._databaseFiles.push(
                     this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Default Step Color"] || this.normalColor();
                     break;
             }
-            var lines = this.sliceText(stepText, this.contentsWidth());
+            var lines = this.sliceText(this.convertEscapeCharacters(stepText), this.contentsWidth());
             for (var j = 0; j < lines.length; j += 1) {
                 var bulletOffset = 0;
                 if (j > 0)
@@ -849,7 +849,7 @@ DataManager._databaseFiles.push(
                         this.write();
                         break;
                     case "custom":
-                        amount = this.sliceText(bullet + reward[1], this.contentsWidth());
+                        amount = this.sliceText(bullet + this.convertEscapeCharacters(reward[1]), this.contentsWidth());
                         for (var j = 0; j < amount.length; j += 1) {
                             var bulletOffset = 0;
                             if (j > 0)
