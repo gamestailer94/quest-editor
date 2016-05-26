@@ -30,7 +30,7 @@
 //=============================================================================
 
 /*:
- * @plugindesc v1.0 - A simplistic quest system with various customization options.
+ * @plugindesc - A simplistic quest system with various customization options.
  * @author Gamestailer94
  * 
  * @param Auto Rewards
