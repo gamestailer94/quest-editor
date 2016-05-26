@@ -32,7 +32,7 @@
 /*:
  * @plugindesc v1.0 - A simplistic quest system with various customization options.
  * @author Gamestailer94
- *jksrhaghuairdhgukasdfhukghkrgsfhkursgdh
+ * 
  * @param Auto Rewards
  * @desc True or False. Tells the script whether or not to automatically give quest rewards upon completion.
  * @default true
