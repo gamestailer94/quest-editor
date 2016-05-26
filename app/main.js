@@ -258,7 +258,7 @@ function displayAbout(){
         type: 'info',
         title: 'About',
         message: "Abut this Editor and the JS Plugin",
-        detail: "This Editor has been Made by: gamestailer94\nFixes and addition Features for the JS Plugin by: gamestailer94\nData Format and original JS Plugin by: gameus",
+        detail: "This Editor has been Made by: gamestailer94\nFixes and addition Features for the JS Plugin by: gamestailer94\nProgram Icon by: BlueDragon\nData Format and original JS Plugin by: gameus",
         buttons: ['Close'],
         defaultId: 0
     };
