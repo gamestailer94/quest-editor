@@ -91,10 +91,12 @@ var platform = os.platform() + '_' + os.arch();
 var version = app.getVersion();
 
 autoUpdater.setFeedURL('https://quest.gamestailer94.de/update/'+platform+'/'+version);
- try {
-    autoUpdater.checkForUpdates();
-} catch(error){
-    //looks like app is not installed, skip update check.
+if(os.platform() != "darwin") {
+    try {
+        autoUpdater.checkForUpdates();
+    } catch (error) {
+        //looks like app is not installed, skip update check.
+    }
 }
 autoUpdater.on('update-downloaded', function(){
     const options = {
