@@ -90,8 +90,8 @@ function handleSquirrelEvent() {
 var platform = os.platform() + '_' + os.arch();
 var version = app.getVersion();
 
-autoUpdater.setFeedURL('https://quest.gamestailer94.de/update/'+platform+'/'+version);
 if(os.platform() != "darwin") {
+    autoUpdater.setFeedURL('https://quest.gamestailer94.de/update/'+platform+'/'+version);
     try {
         autoUpdater.checkForUpdates();
     } catch (error) {
