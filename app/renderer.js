@@ -487,7 +487,7 @@
                     )
                 ).append(
                     $('<td>').append(
-                        createRewardAmountEl(value[0],value[2])
+                        createRewardAmountEl(value[0],value[2], value[1])
                     )
                 ).append(
                     $('<td>').append(
@@ -518,14 +518,23 @@
         return table;
     }
 
-    function createRewardAmountEl(type, value){
+    function createRewardAmountEl(type, value, value2){
         if(type != 'custom'){
-            return $('<input>',{
-                'class': 'form-control input-sm editRewardValue',
-                value: parseInt(value),
-                type: 'number',
-                'min': 1
-            })
+            if(type != 'xp' && type != 'gold'){
+                return $('<input>', {
+                    'class': 'form-control input-sm editRewardValue',
+                    value: parseInt(value),
+                    type: 'number',
+                    'min': 1
+                })
+            }else {
+                return $('<input>', {
+                    'class': 'form-control input-sm editRewardValue',
+                    value: parseInt(value2),
+                    type: 'number',
+                    'min': 1
+                })
+            }
         }else{
             return $('<input>',{
                 'class': 'form-control input-sm editRewardValue',
@@ -983,7 +992,11 @@
         var questId = that.parents('.panel-default').parents('.panel-default').data('id');
         var rewardIndex = that.parents('tr').data('index');
         if(quests[questId-1].rewards[rewardIndex][0] != 'custom') {
-            quests[questId - 1].rewards[rewardIndex][2] = Number(that.val());
+            if(quests[questId-1].rewards[rewardIndex][0] != 'gold' && quests[questId-1].rewards[rewardIndex][0] != 'xp') {
+                quests[questId - 1].rewards[rewardIndex][2] = Number(that.val());
+            }else {
+                quests[questId - 1].rewards[rewardIndex][1] = Number(that.val());
+            }
         }else{
             quests[questId - 1].rewards[rewardIndex][2] = that.val();
         }
