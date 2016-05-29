@@ -14,8 +14,6 @@
         });
         var rows = iconImg.height/32;
         var cols = iconImg.width/32;
-        console.log(rows);
-        console.log(cols);
         var id = 0;
         for(var row = 1; row <= rows; row++){
             var elRow = $('<tr>');
@@ -54,6 +52,7 @@
         iconImg.src = 'data:image/png;base64,'+icons;
         questID = id;
         $('head').find('style').html('.icons{ background: url(data:image/png;base64,'+icons+') no-repeat left top;}');
+        $('.icons').css('height',iconImg.height).css('width', iconImg.width);
         drawTable();
     })
 
