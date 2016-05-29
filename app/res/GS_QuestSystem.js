@@ -912,6 +912,9 @@ DataManager._databaseFiles.push(
         if (this.questBitmap.height > this.contentsHeight() && this.offY < this.questBitmap.height - this.contentsHeight()) {
             SoundManager.playCursor();
             this.offY += this.lineHeight() + this.textPadding();
+            if(this.offY > this.questBitmap.height - this.contentsHeight()){
+                this.offY = this.questBitmap.height - this.contentsHeight();
+            }
             this.refresh();
         }
     };
