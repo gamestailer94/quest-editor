@@ -12,9 +12,6 @@ sudo: required
 dist: trusty
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.7
     packages:
       - libgnome-keyring-dev
       - icnsutils
@@ -32,10 +29,5 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gem install fpm; fi
   - npm prune
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install git-lfs; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then git lfs pull; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl https://repository.certum.pl/cscasha2.pem >> /tmp/bundle.crt; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then security import "/tmp/bundle.crt" -k ~/Library/Keychains/login.keychain -T /usr/bin/codesign; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl -L https://github.com/github/git-lfs/releases/download/v1.2.0/git-lfs-linux-amd64-1.2.0.tar.gz | tar -xz; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then git-lfs-1.2.0/git-lfs pull; fi
