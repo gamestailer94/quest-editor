@@ -15,7 +15,6 @@ addons:
     packages:
       - libgnome-keyring-dev
       - icnsutils
-      - clang-3.7
       - graphicsmagick
       - ruby
 cache:
@@ -24,7 +23,6 @@ cache:
     - app/node_modules
     - ~/.electron
 install:
-  - npm install npm -g
   - npm install
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gem install fpm; fi
   - npm prune
