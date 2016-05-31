@@ -10,9 +10,12 @@ const clipboard = electron.clipboard;
 const autoUpdater = electron.autoUpdater;
 const os = require('os');
 const path = require('path');
+const isReachable = require('is-reachable');
 const categoriesModalPath = path.join('file://', __dirname, 'modals/categories.html');
 const iconModalPath = path.join('file://', __dirname, 'modals/icons.html');
 const setMaxPath = path.join('file://', __dirname, 'modals/setMax.html');
+const version = app.getVersion();
+const platform = os.platform() + '_' + os.arch();
 const debug = false;
 
 
@@ -60,7 +63,11 @@ function handleSquirrelEvent() {
             //   explorer context menus
 
             // Install desktop and start menu shortcuts
-            spawnUpdate(['--createShortcut', exeName]);
+            try {
+                spawnUpdate(['--createShortcut', exeName]);
+            }catch(e){
+
+            }
 
             setTimeout(app.quit, 1000);
             return true;
@@ -70,7 +77,11 @@ function handleSquirrelEvent() {
             // --squirrel-updated handlers
 
             // Remove desktop and start menu shortcuts
-            spawnUpdate(['--removeShortcut', exeName]);
+            try {
+                spawnUpdate(['--removeShortcut', exeName]);
+            }catch(e){
+
+            }
 
             setTimeout(app.quit, 1000);
             return true;
@@ -85,19 +96,23 @@ function handleSquirrelEvent() {
     }
 }
 
-//Auto Update Handling
+function update() {
 
-var platform = os.platform() + '_' + os.arch();
-var version = app.getVersion();
+    //Auto Update Handling
 
-if(os.platform() != "darwin") {
-    autoUpdater.setFeedURL('https://quest.gamestailer94.de/update/'+platform+'/'+version);
-    try {
-        autoUpdater.checkForUpdates();
-    } catch (error) {
-        //looks like app is not installed, skip update check.
-    }
+    isReachable("quest.gamestailer94.de/update/",function (e,reachable) {
+        //can we connect to update server ?
+        if(reachable) {
+            autoUpdater.setFeedURL('https://quest.gamestailer94.de/update/' + platform + '/' + version);
+            try {
+                autoUpdater.checkForUpdates();
+            } catch (Exception) {
+                //looks like app is not installed, skip update check.
+            }
+        }
+    });
 }
+
 autoUpdater.on('update-downloaded', function(){
     const options = {
         type: 'question',
@@ -143,6 +158,12 @@ let menuTemplate = [{
 },{
     label: "Help",
     submenu: [{
+        label: "Version "+version,
+        enabled: false
+    },{
+        label: "Check for Update",
+        click: update
+    },{
         label: 'About',
         click: displayAbout
     }]
@@ -150,6 +171,7 @@ let menuTemplate = [{
 ];
 
 function createWindow () {
+    update();
     const menu = Menu.buildFromTemplate(menuTemplate);
     Menu.setApplicationMenu(menu);
     // Create the browser window.
