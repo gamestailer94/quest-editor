@@ -111,9 +111,15 @@
     function reloadQuests(){
         $('#loader').removeClass('hidden');
         $('#mainContent').addClass('hidden');
-        clearQuests();
-        showQuests();
-        checkPlugin();
+        try {
+            clearQuests();
+            showQuests();
+            checkPlugin();
+        }catch(e){
+            logger.error("General Error in reloadQuests");
+            logger.error(e);
+            ipc.send("showError", e.stack);
+        }
         $('#loader').addClass('hidden');
         $('#mainContent').removeClass('hidden');
     }

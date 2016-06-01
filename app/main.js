@@ -321,7 +321,7 @@ ipc.on('showError', function (event, stack) {
     logger.error("Error via ipc:");
     logger.error(stack);
     clipboard.writeText(stack);
-    dialog.showErrorBox('Error', 'Please Report this Error in GitHub or at the Forums Topic.\nThis Error has been Copied to your Clipboard.\nThe Application will now exit.\n\nTrace:\n\n'+stack);
+    dialog.showErrorBox('Error', 'Please Report this Error in GitHub or at the Forums Topic.\nThis Error has been Copied to your Clipboard.\nThe Logfile is here: '+path.join(app.getAppPath(),"renderer.log")+'\n\nThe Application will now exit.\n\nTrace:\n\n'+stack);
     if(!debug){
         mainWindow.close();
         app.quit();
