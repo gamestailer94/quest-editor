@@ -16,6 +16,12 @@ const iconModalPath = path.join('file://', __dirname, 'modals/icons.html');
 const setMaxPath = path.join('file://', __dirname, 'modals/setMax.html');
 const version = app.getVersion();
 const platform = os.platform() + '_' + os.arch();
+const winston = require('winston');
+const logger = new(winston.Logger)({
+    transports:[
+        new (winston.transports.File)({ filename: 'main.log', json: false })
+    ]
+});
 const debug = false;
 
 
@@ -44,7 +50,8 @@ function handleSquirrelEvent() {
 
         try {
             spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
-        } catch (error) {}
+        } catch (error) {
+        }
 
         return spawnedProcess;
     };
@@ -103,12 +110,22 @@ function update() {
     isReachable("quest.gamestailer94.de/update/",function (e,reachable) {
         //can we connect to update server ?
         if(reachable) {
-            autoUpdater.setFeedURL('https://quest.gamestailer94.de/update/' + platform + '/' + version);
             try {
-                autoUpdater.checkForUpdates();
-            } catch (Exception) {
-                //looks like app is not installed, skip update check.
+                autoUpdater.setFeedURL('https://quest.gamestailer94.de/update/' + platform + '/' + version);
+                try {
+                    autoUpdater.checkForUpdates();
+                } catch (Exception) {
+                    logger.info("Error downloading Updates");
+                    logger.info("Is App not Installed?");
+                    logger.info(Exception);
+                    //looks like app is not installed, skip update check.
+                }
+            }catch(Exception){
+                logger.error("Error Requesting Updates");
+                logger.error(Exception);
             }
+        }else{
+            logger.info("No Internet, Skip Update Check");
         }
     });
 }
@@ -301,6 +318,8 @@ ipc.on('replacePluginDialog', function(event){
 });
 
 ipc.on('showError', function (event, stack) {
+    logger.error("Error via ipc:");
+    logger.error(stack);
     clipboard.writeText(stack);
     dialog.showErrorBox('Error', 'Please Report this Error in GitHub or at the Forums Topic.\nThis Error has been Copied to your Clipboard.\nThe Application will now exit.\n\nTrace:\n\n'+stack);
     if(!debug){

@@ -10,6 +10,13 @@
     const path = require('path');
     const sha1 = require('sha1');
     const md5 = require('md5');
+    const winston = require('winston');
+    const logger = new(winston.Logger)({
+        transports:[
+            new (winston.transports.File)({ filename: 'renderer.log', json: false })
+        ]
+    });
+
     var maxValue = 1;
     var categories = ['Primary', 'Secondary'];
     var projectDir = '';
@@ -65,6 +72,7 @@
             $('#wrongFolder').removeClass('hidden');
             $('#loader').addClass('hidden');
             cont = false;
+            logger.warn("Cant Access Game.rpgproject ("+projectDir+"), wrong Folder or no Permissions?");
         }
         if(cont) {
             try{
@@ -72,12 +80,12 @@
                 var read = fs.readFileSync(file, {encoding: 'utf8'});
                 fs.closeSync(file);
             } catch(Exception){
+                logger.error("Exception while trying to Open/Create Quests.json");
+                logger.error(Exception);
                 var read = '';
             }
             if (read != '') {
-                if(isLegacyData(read)) {
-                    loadLegacyData(read);
-                }
+                loadData(read);
                 maxValue = quests.length;
             }
 
@@ -87,11 +95,17 @@
     }
 
     function showQuests(){
-        var newQuest;
-        $.each(quests, function(index, value){
-            newQuest = getPanel(value.name, value.desc, value.id, value.steps, value.rewards, value.icon, value.cat);
-            elQuests.append(newQuest);
-        })
+        try {
+            var newQuest;
+            $.each(quests, function (index, value) {
+                newQuest = getPanel(value.name, value.desc, value.id, value.steps, value.rewards, value.icon, value.cat);
+                elQuests.append(newQuest);
+            });
+        }catch(e){
+            logger.error("Error while Drawing Panels");
+            logger.error(e);
+            ipc.send("showError",e.stack);
+        }
     }
 
     function reloadQuests(){
@@ -104,13 +118,15 @@
         $('#mainContent').removeClass('hidden');
     }
 
-    function isLegacyData(data){
-        var json = JSON.parse(data);
-        return $.isArray(json);
-    }
-
-    function loadLegacyData(data){
-        var json = JSON.parse(data);
+    function loadData(data){
+        logger.info("Loading Data");
+        try {
+            var json = JSON.parse(data);
+        }catch(Exception){
+            logger.error("Error loading Data");
+            logger.error(Exception);
+            ipc.send("showError", Exception.stack);
+        }
         categories = json.shift();
         quests = json;
     }
@@ -680,31 +696,35 @@
             icons = read.toString('base64');
             $('head').find('style').html('.iconDiv{ background:  url(data:image/png;base64,'+icons+') no-repeat left top;}');
         } catch(Exception){
-            ipc.send('showError',Exception);
+            logger.error("Error while loading System Files");
+            logger.error(Exception);
+            ipc.send('showError',Exception.stack);
         }
     }
 
     function checkPlugin(){
         var installed = false;
         try {
-            if (fs.statSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'))) {
-                var plugin = md5(fs.readFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js')));
-                var builtin = md5(fs.readFileSync(path.join(__dirname, '/res/GS_QuestSystem.js')));
-                if (plugin != builtin) {
-                    ipc.send('updatePluginDialog');
-                }
-                installed = true;
+            fs.accessSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'))
+            var plugin = md5(fs.readFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js')));
+            var builtin = md5(fs.readFileSync(path.join(__dirname, '/res/GS_QuestSystem.js')));
+            if (plugin != builtin) {
+                ipc.send('updatePluginDialog');
             }
+            installed = true;
         } catch(Exception){
-
+            logger.log("debug","Error while Accessing JS Plugin");
+            logger.log("debug",Exception);
         }
-        try {
-            if (fs.statSync(path.join(projectDir, '/js/plugins/GameusQuestSystem.js'))) {
+        if(!installed) {
+            try {
+                fs.accessSync(path.join(projectDir, '/js/plugins/GameusQuestSystem.js'));
                 ipc.send('replacePluginDialog');
                 installed = true
+            } catch (Exception) {
+                logger.log("debug","Error while Accessing Legacy JS Plugin");
+                logger.log("debug",Exception);
             }
-        } catch(Exception){
-
         }
         if(!installed) {
             ipc.send('installPluginDialog')
@@ -717,6 +737,9 @@
                 var newPlugin = fs.readFileSync(path.join(__dirname, '/res/GS_QuestSystem.js'));
                 fs.writeFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'), newPlugin);
             } catch(Exception){
+
+                logger.error("Error while Updating JS Plugin");
+                logger.error(Exception);
                 ipc.send('showError',Exception.stack);
             }
         }
@@ -729,7 +752,9 @@
                 fs.writeFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'),newPlugin);
                 fs.unlinkSync(path.join(projectDir, '/js/plugins/GameusQuestSystem.js'));
             } catch(Exception){
-                ipc.send('showError',Exception);
+                logger.error("Error while replacing JS Plugin");
+                logger.error(Exception);
+                ipc.send('showError',Exception.stack);
             }
         }
     }
@@ -740,7 +765,9 @@
                 var newPlugin = fs.readFileSync(path.join(__dirname, '/res/GS_QuestSystem.js'));
                 fs.writeFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'),newPlugin);
             } catch(Exception){
-                ipc.send('showError',Exception);
+                logger.error("Error while installing JS Plugin");
+                logger.error(Exception);
+                ipc.send('showError',Exception.stack);
             }
         }
     }
@@ -774,13 +801,18 @@
         var data = $.merge([], quests);
         data.unshift(categories);
         data = JSON.stringify(data);
-        var file = fs.openSync(path.join(projectDir, '/data/Quests.json'), 'w');
-        fs.writeFileSync(file,data ,{encoding: 'utf8'});
-        fs.closeSync(file);
-        $('#saved').slideDown();
-        setTimeout(function(){
-            $('#saved').slideUp();
-        }, 3000);
+        try {
+            var file = fs.openSync(path.join(projectDir, '/data/Quests.json'), 'w');
+            fs.writeFileSync(file, data, {encoding: 'utf8'});
+            fs.closeSync(file);
+            $('#saved').slideDown();
+            setTimeout(function () {
+                $('#saved').slideUp();
+            }, 3000);
+        }catch(e){
+            logger.error("Error while Saving Quests.json");
+            logger.error(e);
+        }
     }
 
     function editQuest(){
