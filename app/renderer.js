@@ -134,6 +134,18 @@
             ipc.send("showError", Exception.stack);
         }
         categories = json.shift();
+        
+        //check if first element is real quest or garbage
+        if(typeof json[0].id == 'undefined') {
+            logger.error("locks like a malformed json, fixing");
+            ipc.send("showInfo", "It looks like your Quests.json is malformed, we will try to fix this.\n\nIt may be possible that this removes some Quests, you should try to re-add them.");
+            while (typeof json[0].id == 'undefined') {
+                //shift once more
+                var deleted = json.shift();
+                logger.error("Removed:");
+                logger.error(deleted);
+            }
+        }
         quests = json;
     }
     
