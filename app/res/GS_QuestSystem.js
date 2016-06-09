@@ -849,7 +849,7 @@ DataManager._databaseFiles.push(
                         this.write();
                         break;
                     case "custom":
-                        amount = this.sliceText(bullet + this.convertEscapeCharacters(reward[1]), this.contentsWidth());
+                        amount = this.sliceText(bullet + this.convertEscapeCharacters(reward[2]), this.contentsWidth());
                         for (var j = 0; j < amount.length; j += 1) {
                             var bulletOffset = 0;
                             if (j > 0)
