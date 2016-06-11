@@ -987,6 +987,7 @@ DataManager._databaseFiles.push(
         var item = this._list[index];
         var rect = this.itemRectForText(index);
         var align = this.itemTextAlign();
+        var iconUsed = false;
         this.resetTextColor();
         this.changePaintOpacity(this.isCommandEnabled(index));
         var tempX = 0;
@@ -995,9 +996,10 @@ DataManager._databaseFiles.push(
             if (q.icon > -1 && (GSScripts["Config"]["QuestSystem"]["Use Icons"]).toLowerCase() === "true") {
                 this.drawIcon(q.icon, rect.x + 8, rect.y + 2);
                 tempX = 40;
+                iconUsed = true;
             }
         }
-        this.drawText(this.commandName(index), rect.x + tempX / 2, rect.y, rect.width, align);
+        this.drawText(this.commandName(index), rect.x + tempX / 2, rect.y, iconUsed ? rect.width-16 : rect.width , align);
     };
     
     
