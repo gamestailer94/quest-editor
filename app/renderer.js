@@ -27,7 +27,7 @@
         desc: "<Description>",
         cat: 0,
         rewards: [['item', 1, 1, false]],
-        steps: [['<Step>', false, 1, 1, false,'dafault',false]]
+        steps: [['<Step>', false, 1, 1, false,'default',false]]
     }];
     var elQuests = $('#quests');
     var variables = [];
@@ -147,6 +147,13 @@
             }
         }
         quests = json;
+        //test if new elements are missing
+        for(var i = 0; i < quests.steps.length; i++){
+            if(typeof quests.steps[5] == 'undefined')
+                quests.steps[5] = 'default';
+            if(typeof quests.steps[6] == 'undefined')
+                quests.steps[6] = false;
+        }
     }
     
     function clearQuests(){
@@ -967,7 +974,7 @@
         var that = $(this);
         var questId = that.parents('.panel-default').parents('.panel-default').data('id');
         var parent = that.parents('.bodySteps');
-        quests[questId-1].steps.push(["<Step>",false, 1, 1, false]);
+        quests[questId-1].steps.push(["<Step>",false, 1, 1, false, 'default', false]);
         redrawSteps(questId,parent);
     }
     
