@@ -148,11 +148,13 @@
         }
         quests = json;
         //test if new elements are missing
-        for(var i = 0; i < quests.steps.length; i++){
-            if(typeof quests.steps[5] == 'undefined')
-                quests.steps[5] = 'default';
-            if(typeof quests.steps[6] == 'undefined')
-                quests.steps[6] = false;
+        for(var i = 0; i < quests.length; i++){
+            for(var a = 0; a < quests[i].steps.length; a++) {
+                if (typeof quests[i].steps[a][5] == 'undefined')
+                    quests[i].steps[a][5] = 'default';
+                if (typeof quests[i].steps[a][6] == 'undefined')
+                    quests[i].steps[a][6] = a == 0;
+            }
         }
     }
     
