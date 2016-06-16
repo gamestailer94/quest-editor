@@ -146,6 +146,12 @@ autoUpdater.on('update-downloaded', function(){
     });
 });
 
+autoUpdater.on('error',function(error) {
+    logger.error('Error from AutoUpdater');
+    logger.error('Message is Suppressed...');
+    logger.error(error);
+});
+
 
 
 //Windows and other persistent stuff

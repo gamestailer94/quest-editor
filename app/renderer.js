@@ -27,7 +27,7 @@
         desc: "<Description>",
         cat: 0,
         rewards: [['item', 1, 1, false]],
-        steps: [['<Step>', false, 1, 1, false]]
+        steps: [['<Step>', false, 1, 1, false,'dafault',false]]
     }];
     var elQuests = $('#quests');
     var variables = [];

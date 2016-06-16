@@ -219,6 +219,12 @@
  * Quest ResetStep QuestID StepID
  *   Marks a Step as active (StepID Starting from 1).
  *
+ * Quest ShowStep QuestID StepID
+ *   Shows Step in Quest Info (StepID Starting from 1).
+ * 
+ * Quest HideStep QuestID StepID
+ *   Hides Step in Quest Info (StepID Starting from 1).
+ * 
  * Quest Complete QuestID
  *   Completes the quest, if Auto Reward is on, the script will give out the rewards.
  *
@@ -335,6 +341,12 @@ DataManager._databaseFiles.push(
                     break;
                 case 'resetstep':
                     $gameQuests.get(Number(args[1])).resetStep(Number(args[2]));
+                    break;
+                case 'showstep':
+                    $gameQuests.get(Number(args[1])).showStep(Number(args[2]));
+                    break;
+                case 'hidestep':
+                    $gameQuests.get(Number(args[1])).hideStep(Number(args[2]));
                     break;
             }
         }
@@ -466,6 +478,10 @@ DataManager._databaseFiles.push(
         this.maxSteps = this.steps.length;
         this.currentStep = 0;
         this.status = "progress";
+        for(var i = 0; i < this.steps.length; i++){
+            this.steps[i][5] = 'default';
+            this.steps[i][6] = i == 0;
+        }
     };
     
     Game_Quest.prototype.giveRewards = function() {
@@ -512,6 +528,14 @@ DataManager._databaseFiles.push(
     Game_Quest.prototype.stepStatus = function(stepId){
         return this.steps[stepId-1][5] || 'default';
     };
+
+    Game_Quest.prototype.showStep = function(stepID){
+        this.steps[stepID-1][6] = true;
+    };
+
+    Game_Quest.prototype.hideStep = function(stepID){
+        this.steps[stepID-1][6] = false;
+    };
     
     Game_Quest.prototype.completed = function() {
         return this.status == "completed";
@@ -527,10 +551,12 @@ DataManager._databaseFiles.push(
     
     Game_Quest.prototype.nextStep = function() {
         this.currentStep = this.currentStep + 1 > this.maxSteps - 1 ? this.maxSteps - 1 : this.currentStep + 1;
+        this.steps[this.currentStep][6] = true;
     };
     
     Game_Quest.prototype.backStep = function() {
         this.currentStep = this.currentStep - 1 < 0 ? 0 : this.currentStep - 1;
+        this.steps[this.currentStep][6] = false;
     };
     
     Game_Quest.prototype.currentStep = function() {
@@ -540,6 +566,7 @@ DataManager._databaseFiles.push(
     Game_Quest.prototype.fail = function() {
         this.status = "failed";
     };
+
     
     Game_Quest.prototype.complete = function() {
         if ((GSScripts["Config"]["QuestSystem"]["Auto Rewards"] || "false").toLowerCase() === "true") {
@@ -559,6 +586,7 @@ DataManager._databaseFiles.push(
         this.currentStep = 0;
         for(var i = 0; i < this.steps.length; i++){
             this.resetStep(i+1);
+            this.steps[i][6] = i == 0;
         }
     };
 
@@ -737,15 +765,25 @@ DataManager._databaseFiles.push(
         this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Steps Name Color"] || this.systemColor();
         this.questBitmap.drawText(GSScripts["Config"]["QuestSystem"]["Steps Word"], 0, this.lineY, this.contentsWidth(), this.lineHeight());
         this.write();
-        var maxSteps = Number(GSScripts["Config"]["QuestSystem"]["Max Steps"] || 3);
+        var maxSteps = Number(GSScripts["Config"]["QuestSystem"]["Max Steps"] || 0);
         if (maxSteps == 0)
             maxSteps = q.steps.length;
         if (q.currentStep >= q.steps.length)
             q.currentStep = q.steps.length - 1;
-        var startStep = Math.max(0, q.currentStep - maxSteps + 1);
-        var drawableSteps = q.steps.slice(startStep, q.currentStep + 1);
-        for (var i = 0; i < drawableSteps.length; i += 1) {
-            var step = drawableSteps[i];
+        var visibleSteps = 0;
+        for (var i = 0; i < q.steps.length; i++) {
+            if(q.steps[i][6])
+                visibleSteps++;
+        }
+        var startStep = Math.max(0, visibleSteps - maxSteps + 1);
+        for (var i = 0; i < q.steps.length; i++) {
+            if(i < startStep)
+                continue;
+            if(maxSteps != 0 && i-startStep > maxSteps)
+                break;
+            var step = q.steps[i];
+            if(!step[6])
+                continue;
             var stepText = bullet + step[0];
             if (step[1] === true) {
                 var varVal = $gameVariables.value(step[2]);
@@ -762,15 +800,13 @@ DataManager._databaseFiles.push(
                 }
             }
             switch(step[5]){
-                case "default":
-                    this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Default Step Color"] || this.normalColor();
-                    break;
                 case "failed":
                     this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Failed Step Color"] || this.normalColor();
                     break;
                 case "completed":
                     this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Complete Step Color"] || this.normalColor();
                     break;
+                case "default":
                 default:
                     this.questBitmap.textColor = GSScripts["Config"]["QuestSystem"]["Default Step Color"] || this.normalColor();
                     break;
