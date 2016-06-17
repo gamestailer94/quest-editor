@@ -75,6 +75,14 @@
  * @desc Word for "Rewards"
  * @default Rewards
  *
+ * @param Accept Word
+ * @desc Word for "Accept"
+ * @default Accept
+ *
+ * @param Decline Word
+ * @desc Word for "Decline"
+ * @default Decline
+ *
  * @param ---------------
  *
  * @param Display Options
@@ -348,6 +356,10 @@ DataManager._databaseFiles.push(
                 case 'hidestep':
                     $gameQuests.get(Number(args[1])).hideStep(Number(args[2]));
                     break;
+                case 'accept':
+                    $gameParty.setAcceptId(args[1]);
+                    SceneManager.push(Scene_Accept);
+                    break;
             }
         }
     };
@@ -383,6 +395,8 @@ DataManager._databaseFiles.push(
         GS_Quest_Party_Initialize.call(this);
         // Initialize quest data
         this.quests = [];
+        this.acceptId = -1;
+        this.accepted = false;
     };
     
     Game_Party.prototype.addQuest = function(quest_id) {
@@ -457,6 +471,11 @@ DataManager._databaseFiles.push(
         }
         return flag;
     };
+
+Game_Party.prototype.setAcceptId = function(questid){
+    this.acceptId = questid;
+};
+
     
 //---------------------------------------------------------------------------------------------
 // Game_Quest
@@ -667,8 +686,8 @@ DataManager._databaseFiles.push(
     Window_QuestInfo.prototype = Object.create(Window_Selectable.prototype);
     Window_QuestInfo.prototype.constructor = Window_QuestInfo;
     
-    Window_QuestInfo.prototype.initialize = function() {
-        var xx = (GSScripts["Config"]["QuestSystem"]["Reverse Layout"] || "false").toLowerCase() === "true" ? 0 : 320;
+    Window_QuestInfo.prototype.initialize = function(x,y,width,height) {
+        var xx = (GSScripts["Config"]["QuestSystem"]["Reverse Layout"] || "false").toLowerCase() === "true" || typeof x != 'undefined' ? 0 : 320;
         this.failedImg = GSScripts["Config"]["QuestSystem"]["Failed Image"] || '';
         this.completedImg = GSScripts["Config"]["QuestSystem"]["Completed Image"] || '';
         if (this.failedImg !== '')
@@ -679,7 +698,7 @@ DataManager._databaseFiles.push(
         this.offY = 0;
         this.lineY = 0;
         this.resizeFlag = false;
-        Window_Selectable.prototype.initialize.call(this, xx, 0, Graphics.boxWidth - 320, Graphics.boxHeight);
+        Window_Selectable.prototype.initialize.call(this, xx, y || 0, width || Graphics.boxWidth - 320, height || Graphics.boxHeight);
         this.questBitmap = new Bitmap(this.contentsWidth(), this.contentsHeight());
         this.refresh();
     };
@@ -1169,6 +1188,84 @@ DataManager._databaseFiles.push(
         this.drawText(this.filter, 0, 0, this.contentsWidth(), "center");
     };
 //---------------------------------------------------------------------------------------------
+// Window_Accept
+//---------------------------------------------------------------------------------------------
+function Window_Accept() {
+    this.initialize.apply(this, arguments);
+}
+
+Window_Accept.prototype = Object.create(Window_HorzCommand.prototype);
+Window_Accept.prototype.constructor = Window_Accept;
+
+Window_Accept.prototype.initialize = function(){
+    var xx = 0;
+    var yy = Graphics.boxHeight - this.windowHeight();
+    var width = this.windowWidth();
+    var height = this.windowHeight();
+    Window_HorzCommand.prototype.initialize.call(this, xx, yy);
+};
+
+Window_Accept.prototype.windowWidth = function(){
+    return Graphics.boxWidth;
+};
+
+Window_Accept.prototype.windowHeight = function(){
+    return this.fittingHeight(1);
+};
+
+Window_Accept.prototype.maxCols = function(){
+    return 2;
+};
+
+Window_Accept.prototype.makeCommandList = function(){
+    this.addCommand(GSScripts["Config"]["QuestSystem"]["Accept Word"] || "Accept","accept");
+    this.addCommand(GSScripts["Config"]["QuestSystem"]["Decline Word"] || "Decline","cancel");
+};
+
+Window_Accept.prototype.cursorDown = function(wrap) {
+    this.parent.parent.infoWindow.cursorDown();
+};
+
+Window_Accept.prototype.cursorUp = function(wrap) {
+    this.parent.parent.infoWindow.cursorUp();
+};
+
+Window_Accept.prototype.cursorPagedown = function() {
+    this.parent.parent.infoWindow.cursorDown();
+};
+
+Window_Accept.prototype.cursorPageup = function() {
+    this.parent.parent.infoWindow.cursorUp();
+};
+
+//---------------------------------------------------------------------------------------------
+// Window_Accept_Info
+//---------------------------------------------------------------------------------------------
+
+function Window_Accept_Info() {
+    this.initialize.apply(this, arguments);
+}
+
+Window_Accept_Info.prototype = Object.create(Window_QuestInfo.prototype);
+Window_Accept_Info.prototype.constructor = Window_Accept_Info;
+
+
+Window_Accept_Info.prototype.initialize = function(){
+    var x = 0;
+    var y = 0;
+    var width = this.windowWidth();
+    var height = this.windowHeight();
+    Window_QuestInfo.prototype.initialize.call(this, x, y, width, height);
+};
+
+Window_Accept_Info.prototype.windowWidth = function(){
+    return Graphics.boxWidth;
+};
+
+Window_Accept_Info.prototype.windowHeight = function(){
+    return Graphics.boxHeight - this.fittingHeight(1);
+};
+//---------------------------------------------------------------------------------------------
 // Scene_Quest
 //---------------------------------------------------------------------------------------------
     function Scene_Quest() {
@@ -1243,3 +1340,45 @@ DataManager._databaseFiles.push(
     Scene_Menu.prototype.commandQuest = function() {
         SceneManager.push(Scene_Quest);
     };
+
+//---------------
+// Scene_Accept
+//---------------
+
+function Scene_Accept() {
+    this.initialize.apply(this, arguments);
+}
+
+Scene_Accept.prototype = Object.create(Scene_MenuBase.prototype);
+Scene_Accept.prototype.constructor = Scene_Accept;
+
+Scene_Accept.prototype.initialize = function() {
+    Scene_MenuBase.prototype.initialize.call(this);
+    this.questId = $gameParty.acceptId;
+};
+
+Scene_Accept.prototype.create = function() {
+    Scene_MenuBase.prototype.create.call(this);
+    this.makeWindows();
+};
+
+Scene_Accept.prototype.makeWindows = function(){
+    this.acceptWindow = new Window_Accept();
+    this.acceptWindow.setHandler("accept", this.accepted.bind(this));
+    this.acceptWindow.setHandler("cancel", this.declined.bind(this));
+    this.addWindow(this.acceptWindow);
+    this.infoWindow = new Window_Accept_Info();
+    this.infoWindow.setQuest(this.questId);
+    this.addWindow(this.infoWindow);
+};
+
+Scene_Accept.prototype.accepted = function(){
+    $gameParty.accepted = true;
+    $gameParty.addQuest($gameParty.acceptId);
+    this.popScene();
+};
+
+Scene_Accept.prototype.declined = function(){
+    $gameParty.accepted = false;
+    this.popScene();
+};
