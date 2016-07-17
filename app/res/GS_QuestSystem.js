@@ -767,7 +767,7 @@ DataManager._databaseFiles.push(
         this.write();
         var maxSteps = Number(GSScripts["Config"]["QuestSystem"]["Max Steps"] || 0);
         if (maxSteps == 0)
-            maxSteps = q.steps.length;
+            maxSteps = 5000;
         if (q.currentStep >= q.steps.length)
             q.currentStep = q.steps.length - 1;
         var visibleSteps = 0;

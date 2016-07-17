@@ -82,6 +82,7 @@
             } catch(Exception){
                 logger.error("Exception while trying to Open/Create Quests.json");
                 logger.error(Exception);
+                ipc.send("showError",Exception.stack);
                 var read = '';
             }
             if (read != '') {
@@ -341,7 +342,7 @@
                 $('<option>',{
                     value: index,
                     html: encodeHtml(value),
-                    selected: category == index+1
+                    selected: category == index
                 })
             )
         });
@@ -732,7 +733,7 @@
     function checkPlugin(){
         var installed = false;
         try {
-            fs.accessSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'))
+            fs.accessSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'));
             var plugin = md5(fs.readFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js')));
             var builtin = md5(fs.readFileSync(path.join(__dirname, '/res/GS_QuestSystem.js')));
             if (plugin != builtin) {
@@ -903,6 +904,7 @@
     function saveCat(){
         var that = $(this);
         var questId = that.parents('.panel-default').data('id');
+        console.log(Number(that.find('select').val()));
         quests[questId-1].cat = Number(that.find('select').val());
 
     }

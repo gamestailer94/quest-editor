@@ -22,7 +22,7 @@ const logger = new(winston.Logger)({
         new (winston.transports.File)({ filename: 'main.log', json: false })
     ]
 });
-const debug = false;
+const debug = true;
 
 
 //Squirrle Events Handeling
