@@ -22,6 +22,7 @@ const logger = new(winston.Logger)({
         new (winston.transports.File)({ filename: 'main.log', json: false })
     ]
 });
+var checking = false;
 const debug = false;
 
 
@@ -109,7 +110,7 @@ function update() {
 
     isReachable("quest.gamestailer94.de/update/",function (e,reachable) {
         //can we connect to update server ?
-        if(reachable) {
+        if(reachable && !checking) {
             try {
                 autoUpdater.setFeedURL('https://quest.gamestailer94.de/update/' + platform + '/' + version);
                 try {
@@ -131,6 +132,7 @@ function update() {
 }
 
 autoUpdater.on('update-downloaded', function(){
+    checking = false;
     const options = {
         type: 'question',
         title: 'Update',
@@ -144,6 +146,14 @@ autoUpdater.on('update-downloaded', function(){
             autoUpdater.quitAndInstall();
         }
     });
+});
+
+autoUpdater.on('checking-for-update',function(){
+    checking = true;
+});
+
+autoUpdater.on('update-not-available',function(){
+    checking = false;
 });
 
 autoUpdater.on('error',function(error) {
@@ -180,6 +190,7 @@ let menuTemplate = [{
     }]
 },{
     label: "Help",
+    role: 'help',
     submenu: [{
         label: "Version "+version,
         enabled: false
