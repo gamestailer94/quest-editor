@@ -19,7 +19,7 @@ const platform = os.platform() + '_' + os.arch();
 const winston = require('winston');
 const logger = new(winston.Logger)({
     transports:[
-        new (winston.transports.File)({ filename: 'main.log', json: false })
+        new (winston.transports.File)({ filename: 'main.log', json: false, handleExceptions: true, humanReadableUnhandledException: true })
     ]
 });
 var checking = false;

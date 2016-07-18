@@ -13,7 +13,7 @@
     const winston = require('winston');
     const logger = new(winston.Logger)({
         transports:[
-            new (winston.transports.File)({ filename: 'renderer.log', json: false })
+            new (winston.transports.File)({ filename: 'renderer.log', json: false, handleExceptions: true, humanReadableUnhandledException: true })
         ]
     });
 
