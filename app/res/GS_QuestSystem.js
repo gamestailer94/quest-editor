@@ -880,7 +880,12 @@ DataManager._databaseFiles.push(
                         break;
                     case "gold":
                         amount = reward[1];
-                        this.questBitmap.drawText(bullet + TextManager.currencyUnit, 0, this.lineY, this.contentsWidth(), this.lineHeight());
+                        if (Imported.YEP_CoreEngine && Yanfly.Icon.Gold > 0) {
+                         this.questBitmap.drawText(bullet, 0, this.lineY, this.contentsWidth(), this.lineHeight());
+                         this.drawIcon(Yanfly.Icon.Gold, this.contents.measureTextWidth(bullet), this.lineY);
+                        } else {
+                         this.questBitmap.drawText(bullet + TextManager.currencyUnit, 0, this.lineY, this.contentsWidth(), this.lineHeight());
+                        }
                         this.questBitmap.drawText("x" + String(amount), 0, this.lineY, this.contentsWidth(), this.lineHeight(), "right");
                         this.write();
                         break;
