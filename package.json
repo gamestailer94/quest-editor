@@ -1,7 +1,9 @@
 {
 	"build": {
 		"app-bundle-id": "com.gamestailer94.QuestEditor",
-		"app-category-type": "public.app-category.developer-tools",
+		"mac": {
+			"category": "public.app-category.developer-tools"
+		},
 		"asar": true,
 		"win": {
 			"iconUrl": "https://raw.githubusercontent.com/gamestailer94/quest-editor/master/build/icon.ico"
@@ -16,6 +18,7 @@
 	},
 	"devDependencies": {
 		"electron-builder": ">=3.25.0",
-		"electron": ">=1.1.0"
+		"electron": ">=1.1.0",
+		"electron-prebuilt": ">=1.1.0"
 	}
 }
