@@ -317,40 +317,40 @@ DataManager._databaseFiles.push(
                     SceneManager.push(Scene_Quest);
                     break;
                 case 'add':
-                    $gameParty.addQuest(Number(args[1]));
+                    $gameParty.addQuest(Number(parseInt(args[1])));
                     break;
                 case 'remove':
-                    $gameParty.removeQuest(Number(args[1]));
+                    $gameParty.removeQuest(Number(parseInt(args[1])));
                     break;
                 case 'complete':
-                    $gameQuests.get(Number(args[1])).complete();
+                    $gameQuests.get(Number(parseInt(args[1]))).complete();
                     break;
                 case 'fail':
-                    $gameQuests.get(Number(args[1])).fail();
+                    $gameQuests.get(Number(parseInt(args[1]))).fail();
                     break;
                 case 'reset':
-                    $gameQuests.get(Number(args[1])).reset();
+                    $gameQuests.get(Number(parseInt(args[1]))).reset();
                     break;
                 case 'nextstep':
-                    $gameQuests.get(Number(args[1])).nextStep();
+                    $gameQuests.get(Number(parseInt(args[1]))).nextStep();
                     break;
                 case 'backstep':
-                    $gameQuests.get(Number(args[1])).backStep();
+                    $gameQuests.get(Number(parseInt(args[1]))).backStep();
                     break;
                 case 'completestep':
-                    $gameQuests.get(Number(args[1])).completeStep(Number(args[2]));
+                    $gameQuests.get(Number(parseInt(args[1]))).completeStep(Number(parseInt(args[2])));
                     break;
                 case 'failstep':
-                    $gameQuests.get(Number(args[1])).failStep(Number(args[2]));
+                    $gameQuests.get(Number(parseInt(args[1]))).failStep(Number(parseInt(args[2])));
                     break;
                 case 'resetstep':
-                    $gameQuests.get(Number(args[1])).resetStep(Number(args[2]));
+                    $gameQuests.get(Number(parseInt(args[1]))).resetStep(Number(parseInt(args[2])));
                     break;
                 case 'showstep':
-                    $gameQuests.get(Number(args[1])).showStep(Number(args[2]));
+                    $gameQuests.get(Number(parseInt(args[1]))).showStep(Number(parseInt(args[2])));
                     break;
                 case 'hidestep':
-                    $gameQuests.get(Number(args[1])).hideStep(Number(args[2]));
+                    $gameQuests.get(Number(parseInt(args[1]))).hideStep(Number(parseInt(args[2])));
                     break;
             }
         }
