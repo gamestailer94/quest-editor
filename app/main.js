@@ -19,10 +19,14 @@ const platform = os.platform() + '_' + os.arch();
 const winston = require('winston');
 const logger = new(winston.Logger)({
     transports:[
-        new (winston.transports.File)({ filename: 'main.log', json: false, handleExceptions: true, humanReadableUnhandledException: true })
+        new (winston.transports.File)({
+            filename: 'main.log',
+            json: false,
+            handleExceptions: true,
+            humanReadableUnhandledException: true
+        })
     ]
 });
-var checking = false;
 const debug = false;
 
 
@@ -110,7 +114,7 @@ function update() {
 
     isReachable("quest.gamestailer94.de/update/",function (e,reachable) {
         //can we connect to update server ?
-        if(reachable && !checking) {
+        if(reachable) {
             try {
                 autoUpdater.setFeedURL('https://quest.gamestailer94.de/update/' + platform + '/' + version);
                 try {
@@ -132,7 +136,6 @@ function update() {
 }
 
 autoUpdater.on('update-downloaded', function(){
-    checking = false;
     const options = {
         type: 'question',
         title: 'Update',
@@ -146,14 +149,6 @@ autoUpdater.on('update-downloaded', function(){
             autoUpdater.quitAndInstall();
         }
     });
-});
-
-autoUpdater.on('checking-for-update',function(){
-    checking = true;
-});
-
-autoUpdater.on('update-not-available',function(){
-    checking = false;
 });
 
 autoUpdater.on('error',function(error) {
@@ -190,7 +185,6 @@ let menuTemplate = [{
     }]
 },{
     label: "Help",
-    role: 'help',
     submenu: [{
         label: "Version "+version,
         enabled: false
@@ -311,7 +305,7 @@ ipc.on('installPluginDialog', function(event){
         type: 'question',
         title: 'Install JS Plugin',
         message: "No Plugin JS found!",
-        detail: "Install the included one?\nRemember to active it.",
+        detail: "Install the included one?\nRemember to activate it.",
         buttons: ['Yes', 'No'],
         defaultId: 0
     };

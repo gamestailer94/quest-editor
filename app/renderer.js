@@ -13,7 +13,12 @@
     const winston = require('winston');
     const logger = new(winston.Logger)({
         transports:[
-            new (winston.transports.File)({ filename: 'renderer.log', json: false, handleExceptions: true, humanReadableUnhandledException: true })
+            new (winston.transports.File)({
+                filename: 'renderer.log',
+                json: false,
+                handleExceptions: true,
+                humanReadableUnhandledException: true
+            })
         ]
     });
 
@@ -39,6 +44,7 @@
         'armor': 'Armor',
         'xp': 'XP',
         'gold': 'Gold',
+        'jp': 'Job Points',
         'custom': 'Text'};
     var icons;
 
@@ -46,9 +52,12 @@
 
 
     //STARTUP
+    logger.info("Startup");
     if(!localStorage.getItem('projectFolder')){
+        logger.info('Showing no Folder Warning');
         $('#noFolder').removeClass('hidden');
      }else{
+        logger.info('Startup Complete, loading Project');
          loadProject();
      }
 
@@ -75,21 +84,23 @@
             logger.warn("Cant Access Game.rpgproject ("+projectDir+"), wrong Folder or no Permissions?");
         }
         if(cont) {
+            var read = '';
             try{
                 var file = fs.openSync(path.join(projectDir, '/data/Quests.json'), 'a+');
-                var read = fs.readFileSync(file, {encoding: 'utf8'});
+                read = fs.readFileSync(file, {encoding: 'utf8'});
                 fs.closeSync(file);
             } catch(Exception){
                 logger.error("Exception while trying to Open/Create Quests.json");
                 logger.error(Exception);
-                ipc.send("showError",Exception.stack);
-                var read = '';
+                ipc.send("showError", Exception.stack);
             }
             if (read != '') {
                 loadData(read);
-                maxValue = quests.length;
+            }else{
+                saveQuests();
             }
 
+            maxValue = quests.length;
             loadSystem();
             reloadQuests();
         }
@@ -662,7 +673,9 @@
     }
 
     function loadSystem(){
+        logger.info("Loading System Files:");
         try{
+            logger.info("Loading System.json");
             var file = fs.openSync(path.join(projectDir, '/data/System.json'), 'r');
             var read = fs.readFileSync(file, {encoding: 'utf8'});
             fs.closeSync(file);
@@ -676,6 +689,7 @@
             });
             variables.splice(0,1);
 
+            logger.info("Loading Items.json");
             file = fs.openSync(path.join(projectDir, '/data/Items.json'), 'r');
             read = fs.readFileSync(file, {encoding: 'utf8'});
             fs.closeSync(file);
@@ -690,6 +704,7 @@
                 }
             });
 
+            logger.info("Loading Weapons.json");
             file = fs.openSync(path.join(projectDir, '/data/Weapons.json'), 'r');
             read = fs.readFileSync(file, {encoding: 'utf8'});
             fs.closeSync(file);
@@ -704,6 +719,7 @@
                 }
             });
 
+            logger.info("Loading Armors.json");
             file = fs.openSync(path.join(projectDir, '/data/Armors.json'), 'r');
             read = fs.readFileSync(file, {encoding: 'utf8'});
             fs.closeSync(file);
@@ -718,6 +734,7 @@
                 }
             });
 
+            logger.info("Loading IconSet.png");
             file = fs.openSync(path.join(projectDir, '/img/system/IconSet.png'), 'r');
             read = fs.readFileSync(file);
             fs.closeSync(file);
@@ -840,6 +857,7 @@
         }catch(e){
             logger.error("Error while Saving Quests.json");
             logger.error(e);
+            ipc.send('showError',e.stack);
         }
     }
 
@@ -904,7 +922,6 @@
     function saveCat(){
         var that = $(this);
         var questId = that.parents('.panel-default').data('id');
-        console.log(Number(that.find('select').val()));
         quests[questId-1].cat = Number(that.find('select').val());
 
     }

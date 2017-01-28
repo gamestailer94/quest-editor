@@ -75,6 +75,10 @@
  * @desc Word for "Rewards"
  * @default Rewards
  *
+ * @param Job Point Word
+ * @desc Word for "Job Points"
+ * @default "Job Points"
+ *
  * @param ---------------
  *
  * @param Display Options
@@ -506,6 +510,14 @@ DataManager._databaseFiles.push(
                         $gameParty.members()[j].gainExp(reward[1]);
                     }
                     break;
+                case 'jp':
+                    if(Imported.YEP_JobPoints){
+                        var members = $gameParty.members();
+                        members.forEach(function(actor) {
+                            actor.gainJp(reward[1]);
+                        });
+                    }
+                    break;
                 case "gold":
                     $gameParty.gainGold(Number(reward[1]));
                     break;
@@ -869,6 +881,12 @@ DataManager._databaseFiles.push(
                         amount = reward[2];
                         this.questBitmap.drawText(bullet, 0, this.lineY, this.contentsWidth(), this.lineHeight());
                         this.drawItemName(item, this.contents.measureTextWidth(bullet), this.lineY, this.contentsWidth());
+                        this.questBitmap.drawText("x" + String(amount), 0, this.lineY, this.contentsWidth(), this.lineHeight(), "right");
+                        this.write();
+                        break;
+                    case "jb":
+                        amount = reward[1];
+                        this.questBitmap.drawText(bullet + GSScripts["Config"]["QuestSystem"]["Job Point Word"], 0, this.lineY, this.contentsWidth(), this.lineHeight());
                         this.questBitmap.drawText("x" + String(amount), 0, this.lineY, this.contentsWidth(), this.lineHeight(), "right");
                         this.write();
                         break;
