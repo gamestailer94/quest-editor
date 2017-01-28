@@ -1,6 +1,6 @@
 {
 	"build": {
-		"app-bundle-id": "com.gamestailer94.QuestEditor",
+		"appId": "com.gamestailer94.QuestEditor",
 		"mac": {
 			"category": "public.app-category.developer-tools"
 		},
