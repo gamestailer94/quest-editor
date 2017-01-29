@@ -77,7 +77,7 @@
  *
  * @param Job Point Word
  * @desc Word for "Job Points"
- * @default "Job Points"
+ * @default Job Points
  *
  * @param ---------------
  *
@@ -514,7 +514,7 @@ DataManager._databaseFiles.push(
                     if(Imported.YEP_JobPoints){
                         var members = $gameParty.members();
                         members.forEach(function(actor) {
-                            actor.gainJp(reward[1]);
+                            actor.gainJp(reward[2]);
                         });
                     }
                     break;
@@ -884,8 +884,8 @@ DataManager._databaseFiles.push(
                         this.questBitmap.drawText("x" + String(amount), 0, this.lineY, this.contentsWidth(), this.lineHeight(), "right");
                         this.write();
                         break;
-                    case "jb":
-                        amount = reward[1];
+                    case "jp":
+                        amount = reward[2];
                         this.questBitmap.drawText(bullet + GSScripts["Config"]["QuestSystem"]["Job Point Word"], 0, this.lineY, this.contentsWidth(), this.lineHeight());
                         this.questBitmap.drawText("x" + String(amount), 0, this.lineY, this.contentsWidth(), this.lineHeight(), "right");
                         this.write();
