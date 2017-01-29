@@ -7,7 +7,8 @@
 		"asar": true,
 		"win": {
 			"iconUrl": "https://raw.githubusercontent.com/gamestailer94/quest-editor/master/build/icon.ico"
-		}
+		},
+		"forceCodeSigning": false
 	},
 	"scripts": {
 		"postinstall": "install-app-deps",
