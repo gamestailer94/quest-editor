@@ -52,14 +52,13 @@ describe('application launch', function () {
       .isVisible('#noFolder').should.eventually.be.true
   })
 
-  it('sets localStorage', function(){
-    return this.App.client.localStorage('POST',{'key': 'projectFolder', 'value': 'foo'})
+  it('sets localStorage', function () {
+    return this.App.client.localStorage('POST', {'key': 'projectFolder', 'value': 'foo'})
   })
 
-  it('test if wrong folder warning is visible', function(){
+  it('test if wrong folder warning is visible', function () {
     return this.App.client.waitUntilWindowLoaded()
       .isExisting('#wrongFolder').should.eventually.be.true
       .isVisible('#wrongFolder').should.eventually.be.true
   })
-
 })

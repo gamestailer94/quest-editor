@@ -45,22 +45,23 @@ function update () {
         // looks like app is not installed, skip update check.
   }
 }
-
-autoUpdater.signals.updateDownloaded(function () {
-  const options = {
-    type: 'question',
-    title: 'Update',
-    message: 'A newer Version of this Editor and JS Plugin is available, do you want to close and update?',
-    buttons: ['Yes', 'No'],
-    defaultId: 0
-  }
-  dialog.showMessageBox(options, function (index) {
-    if (index === 0) {
-      mainWindow.close()
-      autoUpdater.quitAndInstall()
+if (autoUpdater !== undefined) {
+  autoUpdater.signals.updateDownloaded(function () {
+    const options = {
+      type: 'question',
+      title: 'Update',
+      message: 'A newer Version of this Editor and JS Plugin is available, do you want to close and update?',
+      buttons: ['Yes', 'No'],
+      defaultId: 0
     }
+    dialog.showMessageBox(options, function (index) {
+      if (index === 0) {
+        mainWindow.close()
+        autoUpdater.quitAndInstall()
+      }
+    })
   })
-})
+}
 
 // Windows and other persistent stuff
 
