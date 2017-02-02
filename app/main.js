@@ -45,7 +45,7 @@ function update () {
         // looks like app is not installed, skip update check.
   }
 }
-if (autoUpdater !== undefined) {
+if (autoUpdater.signals !== undefined) {
   autoUpdater.signals.updateDownloaded(function () {
     const options = {
       type: 'question',
