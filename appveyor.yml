@@ -11,7 +11,7 @@ skip_tags: true
 test_script:
   - npm run test
   - npm run standard
-deploy_script: npm run dist
+build_script: npm run dist
 deploy: off
 cache:
   - node_modules
