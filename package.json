@@ -1,25 +1,44 @@
 {
-	"build": {
-		"appId": "com.gamestailer94.QuestEditor",
-		"mac": {
-			"category": "public.app-category.developer-tools"
-		},
-		"asar": true,
-		"win": {
-			"iconUrl": "https://raw.githubusercontent.com/gamestailer94/quest-editor/master/build/icon.ico"
-		},
-		"forceCodeSigning": false
-	},
-	"scripts": {
-		"postinstall": "install-app-deps",
-		"pack": "build --arch all",
-		"dist": "build --arch all",
-		"release": "build",
-		"dist:ia32": "./node_modules/.bin/build --platform win32 --arch ia32"
-	},
-	"devDependencies": {
-		"electron-builder": ">=3.25.0",
-		"electron": ">=1.1.0",
-		"electron-prebuilt": ">=1.1.0"
-	}
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:gamestailer94/quest-editor.git"
+  },
+  "license": "MIT",
+  "build": {
+    "appId": "com.gamestailer94.QuestEditor",
+    "mac": {
+      "category": "public.app-category.developer-tools"
+    },
+    "asar": true,
+    "win": {
+      "iconUrl": "https://raw.githubusercontent.com/gamestailer94/quest-editor/master/build/icon.ico"
+    },
+    "forceCodeSigning": false
+  },
+  "standard": {
+    "globals": [ "jQuery", "$","localStorage" ],
+    "ignore": [
+      "res/",
+      "app/js/vendor/"
+    ]
+  },
+  "scripts": {
+    "test": "mocha",
+    "standard": "standard",
+    "postinstall": "install-app-deps",
+    "pack": "build --arch all",
+    "dist": "build --arch all",
+    "release": "build",
+    "dist:ia32": "./node_modules/.bin/build --platform win32 --arch ia32"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "electron": ">=1.1.0",
+    "electron-builder": ">=3.25.0",
+    "electron-prebuilt": ">=1.1.0",
+    "mocha": "^3.2.0",
+    "spectron": "^3.5.0",
+    "standard": "^8.6.0"
+  }
 }
