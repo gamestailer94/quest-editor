@@ -11,5 +11,5 @@ if [[ "$TRAVIS_TAG" ]]
 then
     echo "Tag set, do not Build. see https://github.com/electron-userland/electron-builder/issues/429"
 else
-    npm test && npm standard && npm run dist
+    npm run test && npm run standard && npm run dist
 fi
