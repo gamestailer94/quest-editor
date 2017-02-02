@@ -4,3 +4,8 @@ electron.asar
 node_modules
 npm-debug.log
 dist
+app/res/GS_QuestSystem_old\.js
+
+main\.log
+
+renderer\.log
