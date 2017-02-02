@@ -9,7 +9,7 @@ chai.should()
 chai.use(chaiAsPromised)
 
 describe('application launch', function () {
-this.timeout(0)
+  this.timeout(300000)
   beforeEach(function () {
     this.App = new Application({
       path: electronPath,
@@ -19,7 +19,6 @@ this.timeout(0)
     chaiAsPromised.transferPromiseness = this.App.transferPromiseness
     return this.App.start()
   })
-
 
   afterEach(function () {
     if (this.App && this.App.isRunning()) {
@@ -36,4 +35,22 @@ this.timeout(0)
       .browserWindow.getBounds().should.eventually.have.property('width').and.be.above(0)
       .browserWindow.getBounds().should.eventually.have.property('height').and.be.above(0)
   })
+
+  it('should have nav elements', function() {
+    return this.App.client.waitUntilWindowLoaded()
+      .isExisting('#bottom-bar').should.eventually.be.true
+      .isVisible('#bottom-bar').should.eventually.be.true
+  })
+
+  it('deletes localStorage', function(){
+    return this.App.client.localStorage('DELETE')
+  })
+
+  it('tests if no folder warning is visible', function(){
+    return this.App.client.waitUntilWindowLoaded()
+      .isExisting('#noFolder').should.eventually.be.true
+      .isVisible('#noFolder').should.eventually.be.true
+  })
+
+
 })
