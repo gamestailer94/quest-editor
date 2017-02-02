@@ -45,7 +45,7 @@ function update () {
         // looks like app is not installed, skip update check.
   }
 }
-if (autoUpdater.signals !== undefined) {
+if (process.env.NODE_ENV !== 'test') {
   autoUpdater.signals.updateDownloaded(function () {
     const options = {
       type: 'question',
