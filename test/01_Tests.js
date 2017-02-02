@@ -36,21 +36,30 @@ describe('application launch', function () {
       .browserWindow.getBounds().should.eventually.have.property('height').and.be.above(0)
   })
 
-  it('should have nav elements', function() {
+  it('should have nav elements', function () {
     return this.App.client.waitUntilWindowLoaded()
       .isExisting('#bottom-bar').should.eventually.be.true
       .isVisible('#bottom-bar').should.eventually.be.true
   })
 
-  it('deletes localStorage', function(){
+  it('deletes localStorage', function () {
     return this.App.client.localStorage('DELETE')
   })
 
-  it('tests if no folder warning is visible', function(){
+  it('tests if no folder warning is visible', function () {
     return this.App.client.waitUntilWindowLoaded()
       .isExisting('#noFolder').should.eventually.be.true
       .isVisible('#noFolder').should.eventually.be.true
   })
 
+  it('sets localStorage', function(){
+    return this.App.client.localStorage('POST',{'key': 'projectFolder', 'value': 'foo'})
+  })
+
+  it('test if wrong folder warning is visible', function(){
+    return this.App.client.waitUntilWindowLoaded()
+      .isExisting('#wrongFolder').should.eventually.be.true
+      .isVisible('#wrongFolder').should.eventually.be.true
+  })
 
 })

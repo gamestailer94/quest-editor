@@ -34,7 +34,7 @@ class NotInstallerException {}
 
 function update () {
   try {
-    if (debug) {
+    if (debug || process.env.NODE_ENV === 'test') {
       throw new NotInstallerException()
     }
     autoUpdater.checkForUpdates()
