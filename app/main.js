@@ -9,6 +9,7 @@ const ipc = electron.ipcMain
 const dialog = electron.dialog
 const clipboard = electron.clipboard
 const autoUpdater = updater.autoUpdater
+const os = require('os')
 const path = require('path')
 const categoriesModalPath = path.join('file://', __dirname, 'modals/categories.html')
 const iconModalPath = path.join('file://', __dirname, 'modals/icons.html')
@@ -45,7 +46,7 @@ function update () {
         // looks like app is not installed, skip update check.
   }
 }
-if (process.env.NODE_ENV !== 'test') {
+if (os.platform() !== 'linux' ) {
   autoUpdater.signals.updateDownloaded(function () {
     const options = {
       type: 'question',
