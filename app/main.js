@@ -46,7 +46,7 @@ function update () {
         // looks like app is not installed, skip update check.
   }
 }
-if (os.platform() !== 'linux' ) {
+if (os.platform() !== 'linux') {
   autoUpdater.signals.updateDownloaded(function () {
     const options = {
       type: 'question',
