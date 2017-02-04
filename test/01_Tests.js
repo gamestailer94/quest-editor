@@ -5,6 +5,7 @@ var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
 var path = require('path')
 var fs = require('fs')
+var sha1 = require('sha1')
 
 chai.should()
 chai.use(chaiAsPromised)
@@ -45,6 +46,7 @@ describe('QuestEditor', function () {
 
   describe('Main Window', function () {
     this.slow(4000)
+    let projectDir = path.join(__dirname, 'files')
 
     it('should have nav elements', function () {
       return App.client.waitUntilWindowLoaded()
@@ -68,9 +70,11 @@ describe('QuestEditor', function () {
     })
 
     it('should have Quests Overview with 1+ elements', function () {
-      let projectDir = path.join(__dirname, 'files')
       let newPlugin = fs.readFileSync(path.join(__dirname, '../app/res/GS_QuestSystem.js'))
       fs.writeFileSync(path.join(projectDir, '/js/plugins/GS_QuestSystem.js'), newPlugin)
+
+      let quests = fs.readFileSync(path.join(projectDir, 'data/_Quests.json'))
+      fs.writeFileSync(path.join(projectDir, 'data/_Quests.json'), quests)
 
       return App.client.localStorage('POST', {'key': 'projectFolder', 'value': projectDir}).then(function () {
         return App.client.refresh()
@@ -86,6 +90,28 @@ describe('QuestEditor', function () {
 
     it('should have rewards', function () {
       return App.client.isExisting('#quests > .panel .bodyRewards').should.eventually.be.true
+    })
+
+    it('should open categories window', function () {
+        return App.client.click('#setCategories')
+          .waitUntilWindowLoaded().should.be.fulfilled
+          .windowHandles().should.eventually.have.property('value').with.lengthOf(2)
+          .windowByIndex(1).should.be.fulfilled
+          .isVisible('#categories').should.eventually.be.true
+          .click('#saveCats').should.be.fulfilled
+          .waitUntilWindowLoaded().should.be.fulfilled
+          .windowHandles().should.eventually.have.property('value').with.lengthOf(1)
+          .windowByIndex(0).should.be.fulfilled
+    })
+
+    it.only('should save quests',function () {
+      fs.writeFileSync(path.join(projectDir, '/data/Quests.json'), '')
+      let checksum = sha1(fs.readFileSync(path.join(projectDir, '/data/Quests.json')))
+      return App.client.click('#saveQuests')
+        .isVisible('#saved').should.eventually.be.true.then(function () {
+          let newChecksum = sha1(fs.readFileSync(path.join(projectDir, '/data/Quests.json')))
+          return newChecksum.should.not.be.equal(checksum)
+        })
     })
   })
 })

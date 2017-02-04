@@ -16,7 +16,11 @@
     "forceCodeSigning": false
   },
   "standard": {
-    "globals": [ "jQuery", "$","localStorage" ],
+    "globals": [
+      "jQuery",
+      "$",
+      "localStorage"
+    ],
     "ignore": [
       "res/",
       "app/js/vendor/",
@@ -40,6 +44,7 @@
     "electron-builder": ">=3.25.0",
     "electron-prebuilt": ">=1.1.0",
     "mocha": "^3.2.0",
+    "sha1": "^1.1.1",
     "spectron": "^3.5.0",
     "standard": "^8.6.0"
   }
