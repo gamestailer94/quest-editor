@@ -19,12 +19,14 @@
     "globals": [ "jQuery", "$","localStorage" ],
     "ignore": [
       "res/",
-      "app/js/vendor/"
+      "app/js/vendor/",
+      "test/files/"
     ]
   },
   "scripts": {
     "test": "mocha",
     "standard": "standard",
+    "standard:fix": "standard --fix",
     "postinstall": "install-app-deps",
     "pack": "build --arch all",
     "dist": "build --arch all",

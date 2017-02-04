@@ -11,3 +11,5 @@ main\.log
 renderer\.log
 
 test\.log
+
+test/files/js/plugins/GS_QuestSystem\.js
