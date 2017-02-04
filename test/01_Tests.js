@@ -93,7 +93,7 @@ describe('QuestEditor', function () {
     })
 
     it('should open categories window', function () {
-        return App.client.click('#setCategories')
+      return App.client.click('#setCategories')
           .waitUntilWindowLoaded().should.be.fulfilled
           .windowHandles().should.eventually.have.property('value').with.lengthOf(2)
           .windowByIndex(1).should.be.fulfilled
@@ -104,7 +104,7 @@ describe('QuestEditor', function () {
           .windowByIndex(0).should.be.fulfilled
     })
 
-    it.only('should save quests',function () {
+    it.only('should save quests', function () {
       fs.writeFileSync(path.join(projectDir, '/data/Quests.json'), '')
       let checksum = sha1(fs.readFileSync(path.join(projectDir, '/data/Quests.json')))
       return App.client.click('#saveQuests')
