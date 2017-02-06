@@ -104,7 +104,7 @@ describe('QuestEditor', function () {
           .windowByIndex(0).should.be.fulfilled
     })
 
-    it.only('should save quests', function () {
+    it('should save quests', function () {
       fs.writeFileSync(path.join(projectDir, '/data/Quests.json'), '')
       let checksum = sha1(fs.readFileSync(path.join(projectDir, '/data/Quests.json')))
       return App.client.click('#saveQuests')

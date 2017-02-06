@@ -65,7 +65,7 @@ function loadProject () {
   $('#wrongFolder').addClass('hidden')
   $('#loader').removeClass('hidden')
   projectDir = path.normalize(localStorage.getItem('projectFolder'))
-  var cont = true
+  let cont = true
   try {
     fs.accessSync(path.join(projectDir, 'Game.rpgproject'))
   } catch (Exception) {
