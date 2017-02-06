@@ -30,7 +30,7 @@ const logger = new (winston.Logger)({
 
 autoUpdater.logger = logger
 
-const debug = true
+const debug = false
 
 class NotInstallerException {}
 
