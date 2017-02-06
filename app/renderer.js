@@ -731,11 +731,11 @@ function loadSystem () {
   }
 }
 
-function loadIcons() {
+function loadIcons () {
   $('#iconsLoading').removeClass('hidden')
   logger.info('Loading IconSet.png')
   $('head').find('style').html('.iconDiv{ background: white repeat left top;}')
-  ipc.send('loadIcons', path.join(projectDir, '/img/system/IconSet.png') )
+  ipc.send('loadIcons', path.join(projectDir, '/img/system/IconSet.png'))
 }
 
 function checkPlugin () {
@@ -1168,7 +1168,8 @@ ipc.on('returnMax', function (event, newQuests) {
   setTimeout(reloadQuests, 200)
 })
 
-ipc.on('returnIcons', function (event, icons) {
+ipc.on('returnIcons', function (event, newIcons) {
+  icons = newIcons
   $('head').find('style').html('.iconDiv{ background:  url(data:image/png;base64,' + icons + ') no-repeat left top;}')
   $('#iconsLoading').slideUp()
   $('#iconsLoading').addClass('hidden')
