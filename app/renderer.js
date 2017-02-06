@@ -94,6 +94,7 @@ function loadProject () {
     maxValue = quests.length
     loadSystem()
     reloadQuests()
+    loadIcons()
   }
 }
 
@@ -723,18 +724,18 @@ function loadSystem () {
         armors[value.id] = value.name
       }
     })
-
-    logger.info('Loading IconSet.png')
-    file = fs.openSync(path.join(projectDir, '/img/system/IconSet.png'), 'r')
-    read = fs.readFileSync(file)
-    fs.closeSync(file)
-    icons = read.toString('base64')
-    $('head').find('style').html('.iconDiv{ background:  url(data:image/png;base64,' + icons + ') no-repeat left top;}')
   } catch (Exception) {
     logger.error('Error while loading System Files')
     logger.error(Exception)
     ipc.send('showError', Exception.stack)
   }
+}
+
+function loadIcons() {
+  $('#iconsLoading').removeClass('hidden')
+  logger.info('Loading IconSet.png')
+  $('head').find('style').html('.iconDiv{ background: white repeat left top;}')
+  ipc.send('loadIcons', path.join(projectDir, '/img/system/IconSet.png') )
 }
 
 function checkPlugin () {
@@ -1165,6 +1166,12 @@ ipc.on('returnMax', function (event, newQuests) {
   quests = newQuests
   updateProgress(null, 100)
   setTimeout(reloadQuests, 200)
+})
+
+ipc.on('returnIcons', function (event, icons) {
+  $('head').find('style').html('.iconDiv{ background:  url(data:image/png;base64,' + icons + ') no-repeat left top;}')
+  $('#iconsLoading').slideUp()
+  $('#iconsLoading').addClass('hidden')
 })
 
 ipc.on('updatePluginDialogReturn', updatePlugin)
