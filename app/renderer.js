@@ -74,7 +74,7 @@ function loadProject () {
     cont = false
     logger.warn('Cant Access Game.rpgproject (' + projectDir + '), wrong Folder or no Permissions?')
   }
-  if (cont) {
+  if (cont === true) {
     var read = ''
     try {
       var file = fs.openSync(path.join(projectDir, '/data/Quests.json'), 'a+')
