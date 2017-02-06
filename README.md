@@ -8,7 +8,7 @@ Build Status
 Info
 --
 This is a Quest System for RPG Maker MV
-You can find more everything you need here: [RPG Maker Forums](http://forums.rpgmakerweb.com/index.php?/topic/62216-game_stailer94%C2%B4s-quest-system/&page=1)
+You can find more everything you need here: [RPG Maker Forums](http://forums.rpgmakerweb.com/index.php?threads/game_stailer94%C2%B4s-quest-system.62216)
 
 Download
 --
