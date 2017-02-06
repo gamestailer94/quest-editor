@@ -44,7 +44,7 @@ describe('QuestEditor', function () {
       .browserWindow.getBounds().should.eventually.have.property('height').and.be.above(0)
   })
 
-  describe('Main Window', function () {
+  describe.skip('Main Window', function () {
     this.slow(4000)
     let projectDir = path.join(__dirname, 'files')
 

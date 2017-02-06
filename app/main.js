@@ -14,6 +14,7 @@ const path = require('path')
 const categoriesModalPath = path.join('file://', __dirname, 'modals/categories.html')
 const iconModalPath = path.join('file://', __dirname, 'modals/icons.html')
 const setMaxPath = path.join('file://', __dirname, 'modals/setMax.html')
+const loadIconsPath = path.join('file://', __dirname, 'modals/loadIcons.html')
 const version = app.getVersion()
 const winston = require('winston')
 const logger = new (winston.Logger)({
@@ -69,6 +70,8 @@ if (os.platform() !== 'linux') {
 let categoriesWin
 let IconWin
 let setMaxWin
+let loadIconsWin
+let iconsPath
 let iconId
 let icons
 let quests
@@ -121,6 +124,7 @@ function createWindow () {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
     mainWindow = null
+    loadIconsWin.close()
   })
 }
 
@@ -177,6 +181,15 @@ ipc.on('getIcons', function () {
 
 ipc.on('setMax', setMax)
 
+ipc.on('loadIcons', loadIcons)
+
+ipc.on('getIconsPath', function () {
+  loadIconsWin.webContents.send('loadIcons', iconsPath)
+})
+
+ipc.on('returnIcons', function (event, icons) {
+  mainWindow.webContents.send('returnIcons', icons)
+})
 ipc.on('getMax', function () {
   setMaxWin.webContents.send('setMax', quests, newMax)
 })
@@ -304,4 +317,10 @@ function setMax (event, Quests, NewMax) {
   setMaxWin = new BrowserWindow({show: false, width: 400, height: 320})
   setMaxWin.on('closed', function () { setMaxWin = null })
   setMaxWin.loadURL(setMaxPath)
+}
+function loadIcons (event, path) {
+  iconsPath = path
+  loadIconsWin = new BrowserWindow({show: false, width: 400, height: 320})
+  loadIconsWin.on('closed', function () { loadIconsWin = null })
+  loadIconsWin.loadURL(loadIconsPath)
 }

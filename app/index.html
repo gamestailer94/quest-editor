@@ -36,6 +36,13 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    <div class="container-fluid save">
+        <div style="display: none" id="saved">
+            <div class="alert alert-success">
+                <h5 class="text-center">Saved.</h5>
+            </div>
+        </div>
+    </div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 hidden" id="noFolder">
@@ -51,17 +58,22 @@
                     <button role="button" type="button" class="btn btn-primary setProjectDirectory">Set Project Directory</button>
                 </div>
             </div>
-            <div class="col-sm-12" style="display: none" id="saved">
-                <div class="alert alert-success">
-                    <h5 class="text-center">Saved.</h5>
-                </div>
-            </div>
             <div class="col-sm-6 col-sm-offset-3 hidden" id="loader">
                 <div class="alert alert-success">
                     <h1 class="text-center">Building Elements</h1>
                     <h5 class="text-center">If you have many Quests this can take some time.</h5>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" style="width: 100%">
+                        <div class="progress-bar progress-bar-primary active progress-bar-striped" role="progressbar" style="width: 100%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-sm-offset-3 hidden" id="iconsLoading">
+                <div class="alert alert-warning">
+                    <h1 class="text-center">Loading Icons</h1>
+                    <h5 class="text-center">Icons are not Visible until this is done.</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-primary active progress-bar-striped" role="progressbar" style="width: 100%">
                         </div>
                     </div>
                 </div>

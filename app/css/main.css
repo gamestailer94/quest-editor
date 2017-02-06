@@ -76,3 +76,17 @@ textarea {
     color: #ffffff;
     padding-top:13px;
 }
+
+.save {
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 1040;
+    overflow: hidden;
+    width:20%;
+}
+
+.save .alert-success {
+    margin-top:15px;
+    margin-bottom: 0;
+}
