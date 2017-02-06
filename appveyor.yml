@@ -1,14 +1,17 @@
 platform:
   - x86
+os: unstable
 install:
   - ps: Install-Product node 6
   - git reset --hard HEAD
   - npm install npm -g
   - npm install
   - npm prune
-build_script: npm run dist
 skip_tags: true
-test: off
+test_script:
+  - npm run test
+  - npm run standard
+build_script: npm run dist
 deploy: off
 cache:
   - node_modules

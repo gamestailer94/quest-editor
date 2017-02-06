@@ -9,3 +9,7 @@ app/res/GS_QuestSystem_old\.js
 main\.log
 
 renderer\.log
+
+test\.log
+
+test/files/js/plugins/GS_QuestSystem\.js

@@ -6,8 +6,7 @@ node_js: "6"
 os:
   - linux
   - osx
-
-script: if [[ "$TRAVIS_TAG" ]]; then echo "Tag set, do not Build. see https://github.com/electron-userland/electron-builder/issues/429"; else npm run dist; fi
+script: ./script/travis-build.sh
 sudo: required
 dist: trusty
 addons:
@@ -29,3 +28,7 @@ install:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl https://repository.certum.pl/cscasha2.pem >> /tmp/bundle.crt; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then security import "/tmp/bundle.crt" -k ~/Library/Keychains/login.keychain -T /usr/bin/codesign; fi
+notifications:
+  email:
+    on_success: never
+    on_failure: change

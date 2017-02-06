@@ -1,0 +1,139 @@
+[
+  [
+    "Primary",
+    "Secondary",
+    "third"
+  ],
+  {
+    "cat": 2,
+    "desc": "Lorem ipsum dolor sit amet, \\c[18]consetetur\\c[0] sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+    "icon": 1,
+    "id": 1,
+    "name": "Tutorial Quest",
+    "rewards": [
+      [
+        "item",
+        1,
+        1,
+        false
+      ],
+      [
+        "xp",
+        75,
+        50,
+        false
+      ],
+      [
+        "gold",
+        120,
+        200,
+        false
+      ]
+    ],
+    "steps": [
+      [
+        "Variables",
+        true,
+        1,
+        20,
+        false,
+        "default",
+        true
+      ],
+      [
+        "Completed",
+        false,
+        1,
+        1,
+        false,
+        "default",
+        false
+      ],
+      [
+        "Failed",
+        false,
+        1,
+        1,
+        false,
+        "default",
+        false
+      ],
+      [
+        "Normal",
+        false,
+        1,
+        1,
+        false,
+        "default",
+        false
+      ],
+      [
+        "Bla",
+        false,
+        1,
+        1,
+        false,
+        "default",
+        false
+      ]
+    ]
+  },
+  {
+    "cat": 0,
+    "desc": "<Description>",
+    "icon": 0,
+    "id": 2,
+    "name": "<Name>",
+    "rewards": [
+      [
+        "item",
+        1,
+        1,
+        false
+      ],
+      [
+        "jp",
+        1,
+        200,
+        false
+      ]
+    ],
+    "steps": [
+      [
+        "<Step>",
+        false,
+        1,
+        1,
+        false,
+        "default",
+        true
+      ]
+    ]
+  },
+  {
+    "cat": 0,
+    "desc": "<Description>",
+    "icon": 0,
+    "id": 3,
+    "name": "<Name>",
+    "rewards": [
+      [
+        "item",
+        1,
+        1,
+        false
+      ]
+    ],
+    "steps": [
+      [
+        "<Step>",
+        false,
+        1,
+        1,
+        false,
+        "default",
+        true
+      ]
+    ]
+  }
+]
